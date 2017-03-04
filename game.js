@@ -4,10 +4,10 @@ var patterns_1 = [[(/ OO....../),0],[(/O..O.. ../),6], [(/......OO /),8],[(/.. .
 var patterns_2 = [[(/  X . X  /),1],[(/ XX....../),0],[(/X..X.. ../),6], [(/......XX /),8],[(/.. ..X..X/),2],[(/ ..X..X../),0], [(/...... XX/),6],[(/..X..X.. /),8],[(/XX ....../),2], [(/ ...X...X/),0],[(/..X.X. ../),6],[(/X...X... /),8], [(/.. .X.X../),2],[(/X X....../),1],[(/X.. ..X../),3], [(/......X X/),7],[(/..X.. ..X/),5],[(/. ..X..X./),1], [(/... XX.../),3],[(/.X..X.. ./),7],[(/...XX .../),5], [(/ X X.. ../),0],[(/ ..X.. X /),6],[(/.. ..X X /),8], [(/ X ..X.. /),2],[(/  XX.. ../),0],[(/X.. .. X /),6], [(/.. .XX   /),8],[(/X  ..X.. /),2],[(/ X  ..X../),0], [(/ ..X..  X/),6],[(/..X..  X /),8],[(/X  ..X.. /),2]];
 var patterns_3 = [[(/OOO....../),'O'], [(/...OOO.../),'O'], [(/......OOO/),'O'], [(/O..O..O../),'O'], [(/.O..O..O./),'O'], [(/..O..O..O/),'O'], [(/O...O...O/),'O'], [(/..O.O.O../),'O'], [(/XXX....../),'X'], [(/...XXX.../),'X'], [(/......XXX/),'X'], [(/X..X..X../),'X'], [(/.X..X..X./),'X'], [(/..X..X..X/),'X'], [(/X...X...X/),'X'], [(/..X.X.X../),'X']];
 var board = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '];
-var X = 'X';
-var O = 'O';
-var players = [X, O];
-var curr_turn = X;
+var player1 = 'X';
+var player2 = 'O';
+var players = [player1, player2];
+var curr_turn = player1;
 
 var comp = function(){
   var x = get_pattern_1_move()
@@ -15,14 +15,14 @@ var comp = function(){
       x = get_pattern_2_move()
         if( x === -1){x = get_move()}
     }
-  move(x,O)
+  move(x,player2)
 }
 
 var move = function(pos,x){
   if(x!=curr_turn){return false}
   if(+pos>=0&&+pos<=8&&!isNaN(+pos)&&board[+pos] === ' '){
     board.splice(+pos,1,x)
-      curr_turn= (x === X)? O: X
+      curr_turn= (x === player1)? player2: player1
       return true
   }
   return false
@@ -98,7 +98,7 @@ var play = function(){
   show()
   console.log("Enter [0-8]:")
   process.openStdin().on('data',function(res){
-    if(move(res, X)){
+    if(move(res, player1)){
       if(winner()||board_filled()) {exit()} else {
         comp()
     if (winner()||board_filled()) {exit()} else {show()}
