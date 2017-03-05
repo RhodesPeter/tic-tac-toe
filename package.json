@@ -1,0 +1,28 @@
+{
+  "name": "tic-tac-toe",
+  "version": "1.0.0",
+  "description": "Command line tic-tac-toe game",
+  "main": "game.js",
+  "scripts": {
+    "test": "node tests/tape-tests.js | tap-spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RhodesPeter/tic-tac-toe.git"
+  },
+  "keywords": [
+    "Javascript",
+    "Node",
+    "Tape"
+  ],
+  "author": "Peter Rhodes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RhodesPeter/tic-tac-toe/issues"
+  },
+  "homepage": "https://github.com/RhodesPeter/tic-tac-toe#readme",
+  "devDependencies": {
+    "tap-spec": "^4.1.1",
+    "tape": "^4.6.3"
+  }
+}
