@@ -4,7 +4,7 @@
   "description": "Command line tic-tac-toe game",
   "main": "game.js",
   "scripts": {
-    "test": "node tests/tape-tests.js"
+    "test": "node tests/tape-tests.js | tap-spec"
   },
   "repository": {
     "type": "git",
@@ -13,8 +13,7 @@
   "keywords": [
     "Javascript",
     "Node",
-    "Tape",
-    "Istanbul"
+    "Tape"
   ],
   "author": "Peter Rhodes",
   "license": "ISC",
@@ -23,6 +22,7 @@
   },
   "homepage": "https://github.com/RhodesPeter/tic-tac-toe#readme",
   "devDependencies": {
+    "tap-spec": "^4.1.1",
     "tape": "^4.6.3"
   }
 }
