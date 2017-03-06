@@ -58,8 +58,8 @@ var move = function(pos,x){
   if(x != curr_turn){return false}
   if(+pos>=0 && +pos<=8 && !isNaN(+pos) && board[+pos] === ' '){
     board.splice(+pos,1,x)
-      curr_turn = (x === player1) ? player2 : player1;
-      return true
+    curr_turn = (x === player1) ? player2 : player1;
+    return true
   }
   return false
 }
@@ -77,29 +77,29 @@ var show = function(){
 // return true if the board is filled
 var board_filled = function(){
   var x = get_move() //rename this variable?
-    if(x === -1){
-      show()
-        console.log('Game over')
-        return true
-    }
+  if(x === -1){
+    show()
+    console.log('Game over')
+    return true
+  }
   return false
 }
 
 // if the board matches a pattern from patterns_3, return the winner
 var winner = function(board){
   var board_string = board.join('')
-    var the_winner = null
-    for(var i = 0;i < patterns_3.length;i++){
-      var array = board_string.match(patterns_3[i][0])
-      if(array){
-        the_winner = patterns_3[i][1]
-      }
+  var the_winner = null
+  for(var i = 0;i < patterns_3.length;i++){
+    var array = board_string.match(patterns_3[i][0])
+    if(array){
+      the_winner = patterns_3[i][1]
     }
+  }
   if(the_winner){
     show()
-      console.log('Game over')
-      // console.log('Game over.', the_winner, 'is the winner!') Add this after tests
-      return [true, the_winner]
+    console.log('Game over')
+    // console.log('Game over.', the_winner, 'is the winner!') Add this after tests
+    return [true, the_winner]
   }
   return [false, null]
 }
@@ -108,12 +108,12 @@ var winner = function(board){
 // (the second value in the array)
 var get_pattern_1_move = function(board){
   var board_string = board.join('')
-    for(var i = 0;i < patterns_1.length;i++){
-      var array = board_string.match(patterns_1[i][0])
-        if(array){ // this is only truthy when someone wins
-          return patterns_1[i][1]
-        }
+  for(var i = 0;i < patterns_1.length;i++){
+    var array = board_string.match(patterns_1[i][0])
+    if(array){ // this is only truthy when someone wins
+      return patterns_1[i][1]
     }
+  }
   return -1
 }
 
@@ -121,10 +121,10 @@ var get_pattern_1_move = function(board){
 // (the second value in the array)
 var get_pattern_2_move = function(board){
   var board_string = board.join('')
-    for(var i = 0;i < patterns_2.length;i++){
-      var array = board_string.match(patterns_2[i][0])
-        if(array){return patterns_2[i][1]}
-    }
+  for(var i = 0;i < patterns_2.length;i++){
+    var array = board_string.match(patterns_2[i][0])
+      if(array){return patterns_2[i][1]}
+  }
   return -1
 }
 
