@@ -42,7 +42,7 @@ var player2 = 'O';
 var currentTurn = player1;
 
 // this searches winningMovePatterns then blockingPatterns and if there is no
-// match run firstMove (which is the first computer move)
+// match run firstMove()
 var findNextMove = function(){
   var nextPos = makeWinningMove(board);
   if(nextPos === -1){
@@ -54,10 +54,9 @@ var findNextMove = function(){
   move(nextPos,player2);
 };
 
-var move = function(pos, player){
+var makeMove = function(pos, player){
   if(player != currentTurn){return false;}
-  // + changes a buffer into an integer
-  if(+pos>=0 && +pos<=8 && !isNaN(+pos) && board[+pos] === ' '){
+  if(+pos >= 0 && +pos <= 8 && !isNaN(+pos) && board[+pos] === ' '){
     board.splice(+pos, 1, player);
     currentTurn = (player === player1) ? player2 : player1;
     return true;
@@ -86,7 +85,7 @@ var isBoardFilled = function(){
 };
 
 // if the board matches a pattern from hasWonPatterns, return the winner
-var winner = function(board){
+var hasSomeoneWon = function(board){
   var board_string = board.join('');
   var theWinner = null;
   for(var i = 0;i < hasWonPatterns.length;i++){
@@ -142,11 +141,11 @@ var startGame = function(){
   console.log("Enter [0-8]:");
   process.openStdin().on('data',function(res){
     if(move(res, player1)){
-      if(winner(board)[0] || isBoardFilled()) {
+      if(hasSomeoneWon(board)[0] || isBoardFilled()) {
         endGame();
       } else {
         findNextMove();
-        if (winner(board)[0] || isBoardFilled()) {
+        if (hasSomeoneWon(board)[0] || isBoardFilled()) {
           endGame();
         } else {
           logBoardToConsole();
@@ -162,5 +161,5 @@ startGame();
 module.exports = {
   makeWinningMove : makeWinningMove,
   makeBlockingMove : makeBlockingMove,
-  winner : winner
+  hasSomeoneWon : hasSomeoneWon
 };
