@@ -15,7 +15,7 @@ var patterns_2 = [ // move to block a win
                   [(/  X . X  /),1],[(/ XX....../),0],[(/X..X.. ../),6],
                   [(/......XX /),8],[(/.. ..X..X/),2],[(/ ..X..X../),0],
                   [(/...... XX/),6],[(/..X..X.. /),8],[(/XX ....../),2],
-                  [(/ ...X...X/),0],[(/..X.X. ../),6],[(/X...X... /),8],
+                  [(/.. .X...X/),2],[(/..X.X. ../),6],[(/X...X... /),8],
                   [(/.. .X.X../),2],[(/X X....../),1],[(/X.. ..X../),3],
                   [(/......X X/),7],[(/..X.. ..X/),5],[(/. ..X..X./),1],
                   [(/... XX.../),3],[(/.X..X.. ./),7],[(/...XX .../),5],
@@ -146,11 +146,11 @@ var play = function(){
   console.log("Enter [0-8]:")
   process.openStdin().on('data',function(res){
     if(move(res, player1)){
-      if(winner(board) || board_filled()) {
+      if(winner(board)[0] || board_filled()) {
         exit()
       } else {
         comp()
-        if (winner(board) || board_filled()) {
+        if (winner(board)[0] || board_filled()) {
           exit()
         } else {
           show()
