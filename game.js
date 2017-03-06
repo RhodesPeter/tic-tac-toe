@@ -99,9 +99,9 @@ var winner = function(board){
     show()
       console.log('Game over')
       // console.log('Game over.', the_winner, 'is the winner!') Add this after tests
-      return true
+      return [true, the_winner]
   }
-  return false
+  return [false, null]
 }
 
 // return the next move by matching a pattern from patterns_1 and returning the number
