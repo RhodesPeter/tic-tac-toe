@@ -130,7 +130,7 @@ var get_pattern_2_move = function(board){
 
 // if the center of board is free, go there, if not go to position 0
 var firstMove = function(){
-  return board[4] === ' ' ? 4 : 0;
+  return board[4] === ' ' ? 4 : board.indexOf(' ');
 };
 
 var endGame = function(){
