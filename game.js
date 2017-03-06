@@ -45,7 +45,7 @@ var curr_turn = player1;
 var comp = function(){
   var x = get_pattern_1_move(board)
   if(x === -1){
-    x = get_pattern_2_move()
+    x = get_pattern_2_move(board)
     if( x === -1){
       x = get_move()
     }
@@ -86,7 +86,7 @@ var board_filled = function(){
 }
 
 // if the board matches a pattern from patterns_3, return the winner
-var winner = function(){
+var winner = function(board){
   var board_string = board.join('')
     var the_winner = null
     for(var i = 0;i < patterns_3.length;i++){
@@ -119,7 +119,7 @@ var get_pattern_1_move = function(board){
 
 // return the next move by matching a pattern from patterns_1 and returning the number
 // (the second value in the array)
-var get_pattern_2_move = function(){
+var get_pattern_2_move = function(board){
   var board_string = board.join('')
     for(var i = 0;i < patterns_2.length;i++){
       var array = board_string.match(patterns_2[i][0])
@@ -146,11 +146,11 @@ var play = function(){
   console.log("Enter [0-8]:")
   process.openStdin().on('data',function(res){
     if(move(res, player1)){
-      if(winner() || board_filled()) {
+      if(winner(board) || board_filled()) {
         exit()
       } else {
         comp()
-        if (winner() || board_filled()) {
+        if (winner(board) || board_filled()) {
           exit()
         } else {
           show()
@@ -165,5 +165,6 @@ play()
 // exports needed for tests
 module.exports = {
   get_pattern_1_move : get_pattern_1_move,
-  exit : exit
+  get_pattern_2_move : get_pattern_2_move,
+  winner : winner
 }
