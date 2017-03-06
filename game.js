@@ -44,9 +44,9 @@ var curr_turn = player1;
 // this searches winningMovePatterns then blockingPatterns and if there is no match run firstMove
 // (which is the first computer move)
 var comp = function(){
-  var x = get_pattern_1_move(board);
+  var x = makeWinningMove(board);
   if(x === -1){
-    x = get_pattern_2_move(board);
+    x = makeBlockingMove(board);
     if( x === -1){
       x = firstMove();
     }
@@ -106,7 +106,7 @@ var winner = function(board){
 
 // return the next move by matching a pattern from winningMovePatterns and returning the number
 // (the second value in the array)
-var get_pattern_1_move = function(board){
+var makeWinningMove = function(board){
   var board_string = board.join('');
   for(var i = 0;i < winningMovePatterns.length;i++){
     var array = board_string.match(winningMovePatterns[i][0]);
@@ -119,7 +119,7 @@ var get_pattern_1_move = function(board){
 
 // return the next move by matching a pattern from winningMovePatterns and returning the number
 // (the second value in the array)
-var get_pattern_2_move = function(board){
+var makeBlockingMove = function(board){
   var board_string = board.join('');
   for(var i = 0;i < blockingPatterns.length;i++){
     var array = board_string.match(blockingPatterns[i][0]);
@@ -160,7 +160,7 @@ startGame();
 
 // exports needed for tests
 module.exports = {
-  get_pattern_1_move : get_pattern_1_move,
-  get_pattern_2_move : get_pattern_2_move,
+  makeWinningMove : makeWinningMove,
+  makeBlockingMove : makeBlockingMove,
   winner : winner
 };
