@@ -74,9 +74,8 @@ var show = function(){
 };
 
 // return true if the board is filled
-var board_filled = function(){
-  var x = firstMove(); //rename this variable?
-  if(x === -1){
+var isBoardFilled = function(){
+  if(board.indexOf(' ') === -1){
     show();
     console.log('Game over');
     return true;
@@ -130,10 +129,7 @@ var get_pattern_2_move = function(board){
 // if the center of board is free, go there, if not go to the first free space
 // this is only on the first move
 var firstMove = function(){
-  if(board[4] === ' '){
-    return 4;
-  }
-  return board.indexOf(' ');
+  return board[4] === ' ' ? 4 : 0;
 };
 
 var exit = function(){
@@ -145,11 +141,11 @@ var play = function(){
   console.log("Enter [0-8]:");
   process.openStdin().on('data',function(res){
     if(move(res, player1)){
-      if(winner(board)[0] || board_filled()) {
+      if(winner(board)[0] || isBoardFilled()) {
         exit();
       } else {
         comp();
-        if (winner(board)[0] || board_filled()) {
+        if (winner(board)[0] || isBoardFilled()) {
           exit();
         } else {
           show();
