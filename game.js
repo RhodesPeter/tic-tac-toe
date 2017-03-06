@@ -39,27 +39,27 @@ var hasWonPatterns = [
 var board = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '];
 var player1 = 'X';
 var player2 = 'O';
-var curr_turn = player1;
+var currentTurn = player1;
 
 // this searches winningMovePatterns then blockingPatterns and if there is no
 // match run firstMove (which is the first computer move)
 var findNextMove = function(){
-  var x = makeWinningMove(board);
-  if(x === -1){
-    x = makeBlockingMove(board);
-    if( x === -1){
-      x = firstMove();
+  var nextPos = makeWinningMove(board);
+  if(nextPos === -1){
+    nextPos = makeBlockingMove(board);
+    if(nextPos === -1){
+      nextPos = firstMove();
     }
   }
-  move(x,player2);
+  move(nextPos,player2);
 };
 
-// this function makes the computers move
-var move = function(pos,x){
-  if(x != curr_turn){return false;}
+var move = function(pos, player){
+  if(player != currentTurn){return false;}
+  // + changes a buffer into an integer
   if(+pos>=0 && +pos<=8 && !isNaN(+pos) && board[+pos] === ' '){
-    board.splice(+pos,1,x);
-    curr_turn = (x === player1) ? player2 : player1;
+    board.splice(+pos, 1, player);
+    currentTurn = (player === player1) ? player2 : player1;
     return true;
   }
   return false;
@@ -88,18 +88,18 @@ var isBoardFilled = function(){
 // if the board matches a pattern from hasWonPatterns, return the winner
 var winner = function(board){
   var board_string = board.join('');
-  var the_winner = null;
+  var theWinner = null;
   for(var i = 0;i < hasWonPatterns.length;i++){
     var array = board_string.match(hasWonPatterns[i][0]);
     if(array){
-      the_winner = hasWonPatterns[i][1];
+      theWinner = hasWonPatterns[i][1];
     }
   }
-  if(the_winner){
+  if(theWinner){
     logBoardToConsole();
     console.log('Game over');
     // console.log('Game over.', the_winner, 'is the winner!') Add this after tests
-    return [true, the_winner];
+    return [true, theWinner];
   }
   return [false, null];
 };
