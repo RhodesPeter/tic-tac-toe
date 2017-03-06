@@ -181,8 +181,8 @@ test('Testing that get_pattern_2_move() returns the correct next position', func
 });
 
 test('Testing that get_pattern_2_move() returns the correct next position', function(t){
-  var board = [' ', '.', '.', '.', 'X', '.', '.', '.', 'X'];
-  t.equals(game.get_pattern_2_move(board), 0, 'patterns_2[9][1] is returned when pattern_2[9][0] is matched');
+  var board = ['.', '.', ' ', '.', 'X', '.', '.', '.', 'X'];
+  t.equals(game.get_pattern_2_move(board), 2, 'patterns_2[9][1] is returned when pattern_2[9][0] is matched');
   t.end();
 });
 
