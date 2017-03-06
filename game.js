@@ -69,14 +69,14 @@ var board_display = function(){
              board[6]+' |'+' '+board[7]+' |'+' '+board[8];
 };
 
-var show = function(){
+var logBoardToConsole = function(){
   console.log(board_display());
 };
 
 // return true if the board is filled
 var isBoardFilled = function(){
   if(board.indexOf(' ') === -1){
-    show();
+    logBoardToConsole();
     console.log('Game over');
     return true;
   }
@@ -94,7 +94,7 @@ var winner = function(board){
     }
   }
   if(the_winner){
-    show();
+    logBoardToConsole();
     console.log('Game over');
     // console.log('Game over.', the_winner, 'is the winner!') Add this after tests
     return [true, the_winner];
@@ -126,8 +126,7 @@ var get_pattern_2_move = function(board){
   return -1;
 };
 
-// if the center of board is free, go there, if not go to the first free space
-// this is only on the first move
+// if the center of board is free, go there, if not go to position 0
 var firstMove = function(){
   return board[4] === ' ' ? 4 : 0;
 };
@@ -137,7 +136,7 @@ var exit = function(){
 };
 
 var play = function(){
-  show();
+  logBoardToConsole();
   console.log("Enter [0-8]:");
   process.openStdin().on('data',function(res){
     if(move(res, player1)){
@@ -148,7 +147,7 @@ var play = function(){
         if (winner(board)[0] || isBoardFilled()) {
           exit();
         } else {
-          show();
+          logBoardToConsole();
         }
       }
     }
