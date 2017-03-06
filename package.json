@@ -4,7 +4,7 @@
   "description": "Command line tic-tac-toe game",
   "main": "game.js",
   "scripts": {
-    "test": "node tests/tape-tests.js | tap-spec"
+    "test": "tape tests/*.js | tap-spec"
   },
   "repository": {
     "type": "git",
