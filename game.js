@@ -1,45 +1,47 @@
 "use strict";
 
-// these patterns are regex
-var patterns_1 = [ // make this move to win
-                  [(/ OO....../),0],[(/O..O.. ../),6],[(/......OO /),8],
-                  [(/.. ..O..O/),2],[(/ ..O..O../),0],[(/...... OO/),6],
-                  [(/..O..O.. /),8],[(/OO ....../),2],[(/ ...O...O/),0],
-                  [(/..O.O. ../),6],[(/O...O... /),8],[(/.. .O.O../),2],
-                  [(/O O....../),1],[(/O.. ..O../),3],[(/......O O/),7],
-                  [(/..O.. ..O/),5],[(/. ..O..O./),1],[(/... OO.../),3],
-                  [(/.O..O.. ./),7],[(/...OO .../),5]
-                 ];
+// regex matches if current player is 1 move away from winning & supplies winning move
+var winningMovePatterns = [
+                           [(/ OO....../),0],[(/O..O.. ../),6],[(/......OO /),8],
+                           [(/.. ..O..O/),2],[(/ ..O..O../),0],[(/...... OO/),6],
+                           [(/..O..O.. /),8],[(/OO ....../),2],[(/ ...O...O/),0],
+                           [(/..O.O. ../),6],[(/O...O... /),8],[(/.. .O.O../),2],
+                           [(/O O....../),1],[(/O.. ..O../),3],[(/......O O/),7],
+                           [(/..O.. ..O/),5],[(/. ..O..O./),1],[(/... OO.../),3],
+                           [(/.O..O.. ./),7],[(/...OO .../),5]
+                          ];
 
-var patterns_2 = [ // move to block a win
-                  [(/  X . X  /),1],[(/ XX....../),0],[(/X..X.. ../),6],
-                  [(/......XX /),8],[(/.. ..X..X/),2],[(/ ..X..X../),0],
-                  [(/...... XX/),6],[(/..X..X.. /),8],[(/XX ....../),2],
-                  [(/.. .X...X/),2],[(/..X.X. ../),6],[(/X...X... /),8],
-                  [(/.. .X.X../),2],[(/X X....../),1],[(/X.. ..X../),3],
-                  [(/......X X/),7],[(/..X.. ..X/),5],[(/. ..X..X./),1],
-                  [(/... XX.../),3],[(/.X..X.. ./),7],[(/...XX .../),5],
-                  [(/ X X.. ../),0],[(/ ..X.. X /),6],[(/.. ..X X /),8],
-                  [(/ X ..X.. /),2],[(/  XX.. ../),0],[(/X.. .. X /),6],
-                  [(/.. .XX   /),8],[(/X  ..X.. /),2],[(/ X  ..X../),0],
-                  [(/ ..X..  X/),6],[(/..X..  X /),8],[(/X  ..X.. /),2]
-                 ];
+// regex matches if opponent is 1 move away from winning & supplies blocking move
+var blockingPatterns = [
+                        [(/  X . X  /),1],[(/ XX....../),0],[(/X..X.. ../),6],
+                        [(/......XX /),8],[(/.. ..X..X/),2],[(/ ..X..X../),0],
+                        [(/...... XX/),6],[(/..X..X.. /),8],[(/XX ....../),2],
+                        [(/.. .X...X/),2],[(/..X.X. ../),6],[(/X...X... /),8],
+                        [(/.. .X.X../),2],[(/X X....../),1],[(/X.. ..X../),3],
+                        [(/......X X/),7],[(/..X.. ..X/),5],[(/. ..X..X./),1],
+                        [(/... XX.../),3],[(/.X..X.. ./),7],[(/...XX .../),5],
+                        [(/ X X.. ../),0],[(/ ..X.. X /),6],[(/.. ..X X /),8],
+                        [(/ X ..X.. /),2],[(/  XX.. ../),0],[(/X.. .. X /),6],
+                        [(/.. .XX   /),8],[(/X  ..X.. /),2],[(/ X  ..X../),0],
+                        [(/ ..X..  X/),6],[(/..X..  X /),8],[(/X  ..X.. /),2]
+                       ];
 
-var patterns_3 = [ // if this pattern matches then the second value is the winner
-                  [(/OOO....../),'O'],[(/...OOO.../),'O'],[(/......OOO/),'O'],
-                  [(/O..O..O../),'O'],[(/.O..O..O./),'O'],[(/..O..O..O/),'O'],
-                  [(/O...O...O/),'O'],[(/..O.O.O../),'O'],[(/XXX....../),'X'],
-                  [(/...XXX.../),'X'],[(/......XXX/),'X'],[(/X..X..X../),'X'],
-                  [(/.X..X..X./),'X'],[(/..X..X..X/),'X'],[(/X...X...X/),'X'],
-                  [(/..X.X.X../),'X']
-                 ];
+// regex matches if a player has won & supplies the winning player
+var hasWonPatterns = [
+                      [(/OOO....../),'O'],[(/...OOO.../),'O'],[(/......OOO/),'O'],
+                      [(/O..O..O../),'O'],[(/.O..O..O./),'O'],[(/..O..O..O/),'O'],
+                      [(/O...O...O/),'O'],[(/..O.O.O../),'O'],[(/XXX....../),'X'],
+                      [(/...XXX.../),'X'],[(/......XXX/),'X'],[(/X..X..X../),'X'],
+                      [(/.X..X..X./),'X'],[(/..X..X..X/),'X'],[(/X...X...X/),'X'],
+                      [(/..X.X.X../),'X']
+                     ];
 
 var board = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '];
 var player1 = 'X';
 var player2 = 'O';
 var curr_turn = player1;
 
-// this searches patterns_1 then patterns_2 and if there is no match run firstMove
+// this searches winningMovePatterns then blockingPatterns and if there is no match run firstMove
 // (which is the first computer move)
 var comp = function(){
   var x = get_pattern_1_move(board);
@@ -83,14 +85,14 @@ var isBoardFilled = function(){
   return false;
 };
 
-// if the board matches a pattern from patterns_3, return the winner
+// if the board matches a pattern from hasWonPatterns, return the winner
 var winner = function(board){
   var board_string = board.join('');
   var the_winner = null;
-  for(var i = 0;i < patterns_3.length;i++){
-    var array = board_string.match(patterns_3[i][0]);
+  for(var i = 0;i < hasWonPatterns.length;i++){
+    var array = board_string.match(hasWonPatterns[i][0]);
     if(array){
-      the_winner = patterns_3[i][1];
+      the_winner = hasWonPatterns[i][1];
     }
   }
   if(the_winner){
@@ -102,26 +104,26 @@ var winner = function(board){
   return [false, null];
 };
 
-// return the next move by matching a pattern from patterns_1 and returning the number
+// return the next move by matching a pattern from winningMovePatterns and returning the number
 // (the second value in the array)
 var get_pattern_1_move = function(board){
   var board_string = board.join('');
-  for(var i = 0;i < patterns_1.length;i++){
-    var array = board_string.match(patterns_1[i][0]);
+  for(var i = 0;i < winningMovePatterns.length;i++){
+    var array = board_string.match(winningMovePatterns[i][0]);
     if(array){ // this is only truthy when someone wins
-      return patterns_1[i][1];
+      return winningMovePatterns[i][1];
     }
   }
   return -1;
 };
 
-// return the next move by matching a pattern from patterns_1 and returning the number
+// return the next move by matching a pattern from winningMovePatterns and returning the number
 // (the second value in the array)
 var get_pattern_2_move = function(board){
   var board_string = board.join('');
-  for(var i = 0;i < patterns_2.length;i++){
-    var array = board_string.match(patterns_2[i][0]);
-      if(array){return patterns_2[i][1];}
+  for(var i = 0;i < blockingPatterns.length;i++){
+    var array = board_string.match(blockingPatterns[i][0]);
+      if(array){return blockingPatterns[i][1];}
   }
   return -1;
 };
@@ -131,21 +133,21 @@ var firstMove = function(){
   return board[4] === ' ' ? 4 : 0;
 };
 
-var exit = function(){
+var endGame = function(){
   process.exit();
 };
 
-var play = function(){
+var startGame = function(){
   logBoardToConsole();
   console.log("Enter [0-8]:");
   process.openStdin().on('data',function(res){
     if(move(res, player1)){
       if(winner(board)[0] || isBoardFilled()) {
-        exit();
+        endGame();
       } else {
         comp();
         if (winner(board)[0] || isBoardFilled()) {
-          exit();
+          endGame();
         } else {
           logBoardToConsole();
         }
@@ -154,7 +156,7 @@ var play = function(){
   });
 };
 
-play();
+startGame();
 
 // exports needed for tests
 module.exports = {
