@@ -1,4 +1,4 @@
- "use strict";
+"use strict";
 
 // these patterns are regex
 var patterns_1 = [ // make this move to win
@@ -43,128 +43,128 @@ var curr_turn = player1;
 // this searches patterns_1 then patterns_2 and if there is no match run get_move
 // (which is the first computer move)
 var comp = function(){
-  var x = get_pattern_1_move(board)
+  var x = get_pattern_1_move(board);
   if(x === -1){
-    x = get_pattern_2_move(board)
+    x = get_pattern_2_move(board);
     if( x === -1){
-      x = get_move()
+      x = get_move();
     }
   }
-  move(x,player2)
-}
+  move(x,player2);
+};
 
 // this function makes the computers move
 var move = function(pos,x){
-  if(x != curr_turn){return false}
+  if(x != curr_turn){return false;}
   if(+pos>=0 && +pos<=8 && !isNaN(+pos) && board[+pos] === ' '){
-    board.splice(+pos,1,x)
+    board.splice(+pos,1,x);
     curr_turn = (x === player1) ? player2 : player1;
-    return true
+    return true;
   }
-  return false
-}
+  return false;
+};
 
 var board_display = function(){
   return ' '+board[0]+' |'+' '+board[1]+' |'+' '+board[2]+'\n===+===+===\n'+' '+
              board[3]+' |'+' '+board[4]+' |'+' '+board[5]+'\n===+===+===\n'+' '+
-             board[6]+' |'+' '+board[7]+' |'+' '+board[8]
-}
+             board[6]+' |'+' '+board[7]+' |'+' '+board[8];
+};
 
 var show = function(){
-  console.log(board_display())
-}
+  console.log(board_display());
+};
 
 // return true if the board is filled
 var board_filled = function(){
-  var x = get_move() //rename this variable?
+  var x = get_move(); //rename this variable?
   if(x === -1){
-    show()
-    console.log('Game over')
-    return true
+    show();
+    console.log('Game over');
+    return true;
   }
-  return false
-}
+  return false;
+};
 
 // if the board matches a pattern from patterns_3, return the winner
 var winner = function(board){
-  var board_string = board.join('')
-  var the_winner = null
+  var board_string = board.join('');
+  var the_winner = null;
   for(var i = 0;i < patterns_3.length;i++){
-    var array = board_string.match(patterns_3[i][0])
+    var array = board_string.match(patterns_3[i][0]);
     if(array){
-      the_winner = patterns_3[i][1]
+      the_winner = patterns_3[i][1];
     }
   }
   if(the_winner){
-    show()
-    console.log('Game over')
+    show();
+    console.log('Game over');
     // console.log('Game over.', the_winner, 'is the winner!') Add this after tests
-    return [true, the_winner]
+    return [true, the_winner];
   }
-  return [false, null]
-}
+  return [false, null];
+};
 
 // return the next move by matching a pattern from patterns_1 and returning the number
 // (the second value in the array)
 var get_pattern_1_move = function(board){
-  var board_string = board.join('')
+  var board_string = board.join('');
   for(var i = 0;i < patterns_1.length;i++){
-    var array = board_string.match(patterns_1[i][0])
+    var array = board_string.match(patterns_1[i][0]);
     if(array){ // this is only truthy when someone wins
-      return patterns_1[i][1]
+      return patterns_1[i][1];
     }
   }
-  return -1
-}
+  return -1;
+};
 
 // return the next move by matching a pattern from patterns_1 and returning the number
 // (the second value in the array)
 var get_pattern_2_move = function(board){
-  var board_string = board.join('')
+  var board_string = board.join('');
   for(var i = 0;i < patterns_2.length;i++){
-    var array = board_string.match(patterns_2[i][0])
-      if(array){return patterns_2[i][1]}
+    var array = board_string.match(patterns_2[i][0]);
+      if(array){return patterns_2[i][1];}
   }
-  return -1
-}
+  return -1;
+};
 
 // if the center of board is free, go there, if not go to the first free space
 // this is only on the first move
 var get_move = function(){
   if(board[4] === ' '){
-    return 4
+    return 4;
   }
-  return board.indexOf(' ')
-}
+  return board.indexOf(' ');
+};
 
 var exit = function(){
-  process.exit()
-}
+  process.exit();
+};
 
 var play = function(){
-  show()
-  console.log("Enter [0-8]:")
+  show();
+  console.log("Enter [0-8]:");
   process.openStdin().on('data',function(res){
     if(move(res, player1)){
       if(winner(board)[0] || board_filled()) {
-        exit()
+        exit();
       } else {
-        comp()
+        comp();
         if (winner(board)[0] || board_filled()) {
-          exit()
+          exit();
         } else {
-          show()
+          show();
         }
       }
     }
-  })
-}
+  });
+};
 
-play()
+play();
 
 // exports needed for tests
 module.exports = {
   get_pattern_1_move : get_pattern_1_move,
   get_pattern_2_move : get_pattern_2_move,
   winner : winner
-}
+};
