@@ -37,17 +37,16 @@ var patterns_3 = [ // if this pattern matches then the second value is the winne
 var board = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '];
 var player1 = 'X';
 var player2 = 'O';
-var players = [player1, player2];
 var curr_turn = player1;
 
-// this searches patterns_1 then patterns_2 and if there is no match run get_move
+// this searches patterns_1 then patterns_2 and if there is no match run firstMove
 // (which is the first computer move)
 var comp = function(){
   var x = get_pattern_1_move(board);
   if(x === -1){
     x = get_pattern_2_move(board);
     if( x === -1){
-      x = get_move();
+      x = firstMove();
     }
   }
   move(x,player2);
@@ -76,7 +75,7 @@ var show = function(){
 
 // return true if the board is filled
 var board_filled = function(){
-  var x = get_move(); //rename this variable?
+  var x = firstMove(); //rename this variable?
   if(x === -1){
     show();
     console.log('Game over');
@@ -130,7 +129,7 @@ var get_pattern_2_move = function(board){
 
 // if the center of board is free, go there, if not go to the first free space
 // this is only on the first move
-var get_move = function(){
+var firstMove = function(){
   if(board[4] === ' '){
     return 4;
   }
