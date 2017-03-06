@@ -41,9 +41,9 @@ var player1 = 'X';
 var player2 = 'O';
 var curr_turn = player1;
 
-// this searches winningMovePatterns then blockingPatterns and if there is no match run firstMove
-// (which is the first computer move)
-var comp = function(){
+// this searches winningMovePatterns then blockingPatterns and if there is no
+// match run firstMove (which is the first computer move)
+var findNextMove = function(){
   var x = makeWinningMove(board);
   if(x === -1){
     x = makeBlockingMove(board);
@@ -145,7 +145,7 @@ var startGame = function(){
       if(winner(board)[0] || isBoardFilled()) {
         endGame();
       } else {
-        comp();
+        findNextMove();
         if (winner(board)[0] || isBoardFilled()) {
           endGame();
         } else {
