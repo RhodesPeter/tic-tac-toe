@@ -3,7 +3,7 @@ var game = require('../game.js');
 
 test('Testing that hasSomeoneWon() returns the correct winning player', function(t){
   var board = [' ', 'O', 'O', '.', '.', '.', '.', '.', ' '];
-  t.notOk(game.hasSomeoneWon(board)[0], 'false is returned when pattern is not matched in patterns_3');
+  t.notOk(game.hasSomeoneWon(board)[0], 'false is returned when pattern is not matched');
   t.equals(game.hasSomeoneWon(board)[1], null, 'test passed: O in the winner');
   t.end();
 });
