@@ -96,8 +96,7 @@ var hasSomeoneWon = function(board){
   }
   if(theWinner){
     logBoardToConsole();
-    console.log('Game over');
-    // console.log('Game over.', the_winner, 'is the winner!') Add this after tests
+    console.log('Game over.', theWinner, 'is the winner!');
     return [true, theWinner];
   }
   return [false, null];
