@@ -51,7 +51,7 @@ var findNextMove = function(){
       nextPos = firstMove();
     }
   }
-  move(nextPos,player2);
+  makeMove(nextPos,player2);
 };
 
 var makeMove = function(pos, player){
@@ -140,7 +140,7 @@ var startGame = function(){
   logBoardToConsole();
   console.log("Enter [0-8]:");
   process.openStdin().on('data',function(res){
-    if(move(res, player1)){
+    if(makeMove(res, player1)){
       if(hasSomeoneWon(board)[0] || isBoardFilled()) {
         endGame();
       } else {
