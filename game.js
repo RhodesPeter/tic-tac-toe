@@ -78,7 +78,7 @@ var logBoardToConsole = function(){
 var isBoardFilled = function(){
   if(board.indexOf(' ') === -1){
     logBoardToConsole();
-    console.log('Game over');
+    console.log("Game over, it's a draw!");
     return true;
   }
   return false;
