@@ -42,13 +42,13 @@ var player2 = 'O';
 var currentTurn = player1;
 
 // this searches winningMovePatterns then blockingPatterns and if there is no
-// match run firstMove()
+// match run defaultMove()
 var findNextMove = function(){
   var nextPos = makeWinningMove(board);
   if(nextPos === -1){
     nextPos = makeBlockingMove(board);
     if(nextPos === -1){
-      nextPos = firstMove();
+      nextPos = defaultMove();
     }
   }
   makeMove(nextPos,player2);
@@ -127,7 +127,7 @@ var makeBlockingMove = function(board){
 };
 
 // if the center of board is free, go there, if not go to position 0
-var firstMove = function(){
+var defaultMove = function(){
   return board[4] === ' ' ? 4 : board.indexOf(' ');
 };
 
@@ -142,13 +142,12 @@ var startGame = function(){
     if(makeMove(res, player1)){
       if(hasSomeoneWon(board)[0] || isBoardFilled()) {
         endGame();
+      }
+      findNextMove();
+      if(hasSomeoneWon(board)[0] || isBoardFilled()) {
+        endGame();
       } else {
-        findNextMove();
-        if (hasSomeoneWon(board)[0] || isBoardFilled()) {
-          endGame();
-        } else {
-          logBoardToConsole();
-        }
+        logBoardToConsole();
       }
     }
   });
