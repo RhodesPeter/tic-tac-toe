@@ -142,13 +142,12 @@ var startGame = function(){
     if(makeMove(res, player1)){
       if(hasSomeoneWon(board)[0] || isBoardFilled()) {
         endGame();
+      }
+      findNextMove();
+      if(hasSomeoneWon(board)[0] || isBoardFilled()) {
+        endGame();
       } else {
-        findNextMove();
-        if (hasSomeoneWon(board)[0] || isBoardFilled()) {
-          endGame();
-        } else {
-          logBoardToConsole();
-        }
+        logBoardToConsole();
       }
     }
   });
