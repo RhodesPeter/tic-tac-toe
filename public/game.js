@@ -76,7 +76,6 @@ var logBoardToConsole = function(){
 };
 
 var logStats = function(){
-  // console.log('--------------');
   console.log('  Round ' + round);
   round++
 };
