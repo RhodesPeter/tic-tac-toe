@@ -12,12 +12,12 @@ var challengeButton = document.getElementsByClassName("pick-game__symbol");
 var player = document.getElementsByClassName("player")[0];
 
 for(var i = 0; i < challengeButton.length; i++) {
-  attachEventListener(i);
+  addListenerToChallengeButtons(i);
 }
 
-// make attachEventListener pure and use for pickChallenge loop :)
-function attachEventListener(i){
+function addListenerToChallengeButtons(i){
   challengeButton[i].addEventListener("click", function() {
+
     var symbol = event.target.innerHTML;
 
     if (gameObject.player1 === "" && gameObject.challenge === 'Human vs. Human'){
@@ -35,11 +35,17 @@ function attachEventListener(i){
 }
 
 for(var i = 0; i < pickChallenge.length; i++) {
+  addListenerToSymbolButtons();
+}
+
+function addListenerToSymbolButtons(){
   pickChallenge[i].addEventListener("click", function() {
     var challenge = event.target.innerHTML;
+
     if (challenge === 'Human vs. Human'){
       player.innerHTML = 'Player 1';
     }
+
     swapVisibility(challengeContainer, symbolContainer);
     addChallenge(challenge);
   });
