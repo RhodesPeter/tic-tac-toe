@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Tic-Tac-Toe</title>
+    <link rel="stylesheet" href="./public/main.css">
+  </head>
+  <body>
+
+    <div class="pick-game">
+      <div class="pick-game__container">
+        <h1 class="pick-game__title">Tic-Tac-Toe</h1>
+        <h2>Choose your game:</h2>
+        <button class="pick-game__challenge">Human vs. Computer</button>
+        <button class="pick-game__challenge">Human vs. Human</button>
+        <button class="pick-game__challenge">Computer vs. Computer</button>
+      </div>
+
+      <div class="pick-game__symbol-container hidden">
+        <h1 class="pick-game__title">Tic-Tac-Toe</h1>
+        <h2 class="player"><h2>
+        <h2>Choose your symbol:</h2>
+        <button class="pick-game__symbol">X</button>
+        <button class="pick-game__symbol">O</button>
+        <button class="pick-game__symbol">&#9813;</button>
+        <button class="pick-game__symbol">+</button>
+        <button class="pick-game__symbol">&#9733;</button>
+        <button class="pick-game__symbol">&hearts;</button>
+      </div>
+    </div>
+
+    <div class="game hidden">
+      <h1 class="pick-game__title">Tic-Tac-Toe</h1>
+      <table class="game__board">
+        <tr>
+          <td class="game__box-1"></td>
+          <td class="game__box-2"></td>
+          <td class="game__box-3"></td>
+        </tr>
+        <tr>
+          <td class="game__box-4"></td>
+          <td class="game__box-5"></td>
+          <td class="game__box-6"></td>
+        </tr>
+        <tr>
+          <td class="game__box-7"></td>
+          <td class="game__box-8"></td>
+          <td class="game__box-9"></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="game__messages"></div>
+
+    <script type="text/javascript" src="./public/index.js"></script>
+    <script type="text/javascript" src="./public/game.js"></script>
+  </body>
+</html>
