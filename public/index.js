@@ -5,9 +5,11 @@ var gameState = {
     player1 : '',
     player2 : '',
     challenge : '',
-    currentTurn : 'player1',
     round : 1,
+    clickedPosition : ''
 }
+
+var currentTurn = 'player1';
 
 var game = document.getElementsByClassName("game")[0];
 var challengeContainer = document.getElementsByClassName("pick-game__container")[0];
@@ -32,6 +34,7 @@ function addListenerToChallengeButtons(i){
     else if (gameState.player1 === ''){
       addSymbol(symbol, 'player1');
       swapVisibility(symbolContainer, game);
+      startMessage()
     }
     else if (gameState.player1 === symbol){
       player.innerHTML = 'That symbol has been taken!';
@@ -39,6 +42,7 @@ function addListenerToChallengeButtons(i){
     else {
       addSymbol(symbol, 'player2');
       swapVisibility(symbolContainer, game);
+      startMessage()
     }
   });
 }
@@ -126,42 +130,168 @@ var hasWonPatterns = [
 
   box[0].addEventListener("click", function() {
       box[0].innerHTML = gameState.player1;
+      gameState.clickedPosition = 0;
   });
 
   box[1].addEventListener("click", function() {
       box[1].innerHTML = gameState.player1;
+      gameState.clickedPosition = 1;
   });
 
   box[2].addEventListener("click", function() {
       box[2].innerHTML = gameState.player1;
+      gameState.clickedPosition = 2;
   });
 
   box[3].addEventListener("click", function() {
       box[3].innerHTML = gameState.player1;
+      gameState.clickedPosition = 3;
   });
 
   box[4].addEventListener("click", function() {
       box[4].innerHTML = gameState.player1;
+      gameState.clickedPosition = 4;
   });
 
   box[5].addEventListener("click", function() {
       box[5].innerHTML = gameState.player1;
+      gameState.clickedPosition = 5;
   });
 
   box[6].addEventListener("click", function() {
       box[6].innerHTML = gameState.player1;
+      gameState.clickedPosition = 6;
   });
 
   box[7].addEventListener("click", function() {
       box[7].innerHTML = gameState.player1;
+      gameState.clickedPosition = 7;
   });
 
   box[8].addEventListener("click", function() {
       box[8].innerHTML = gameState.player1;
-  });
-
-  box[9].addEventListener("click", function() {
-      box[9].innerHTML = gameState.player1;
+      gameState.clickedPosition = 8;
+      startGame();
   });
 
 })();
+
+var round = 1;
+
+function startMessage(){
+  console.log("Click a square to make your first move!"); // log this to screen
+}
+
+var startGame = function(){
+
+  logStats();
+  var board = gameState.board;
+  console.log(gameState.clickedPosition);
+  if(makeMove(gameState.clickedPosition, 'player1')){
+    if(hasSomeoneWon(gameState.board)[0] || isBoardFilled(board)) {
+      endGame();
+    }
+    logStats();
+    findNextMove(board);
+    if(hasSomeoneWon(board)[0] || isBoardFilled(board)) {
+      endGame();
+    } else {
+      logBoardToConsole(board);
+    }
+  }
+
+};
+
+var logStats = function(){
+  console.log('  Round ' + round); // print this on screen
+  round++
+};
+
+var makeMove = function(pos, player){
+  if(player !== currentTurn){return false;}
+  if(+pos >= 0 && +pos <= 8 && !isNaN(+pos) && gameState.board[+pos] === ' '){
+    gameState.board.splice(+pos, 1, player);
+    currentTurn = (currentTurn === 'player1') ? 'player2' : 'player1';
+    return true;
+  }
+  return false;
+};
+
+// if the board matches a pattern from hasWonPatterns, return the winner
+var hasSomeoneWon = function(board){
+  var board_string = gameState.board.join('');
+  var theWinner = null;
+  for(var i = 0;i < hasWonPatterns.length;i++){
+    var array = board_string.match(hasWonPatterns[i][0]);
+    if(array){
+      theWinner = hasWonPatterns[i][1];
+    }
+  }
+  if(theWinner){
+    logBoardToConsole();
+    console.log('Game over.', theWinner, 'is the winner!');
+    return [true, theWinner];
+  }
+  return [false, null];
+};
+
+// return true if the board is filled
+var isBoardFilled = function(){
+  if(gameState.board.indexOf(' ') === -1){
+    console.log("Game over, it's a draw!");
+    return true;
+  }
+  return false;
+};
+
+// this searches winningMovePatterns then blockingPatterns and if there is no
+// match run defaultMove()
+var findNextMove = function(board){
+  var nextPos = makeWinningMove(board);
+  if(nextPos === -1){
+    nextPos = makeBlockingMove(board);
+    if(nextPos === -1){
+      nextPos = defaultMove(board);
+    }
+  }
+  makeMove(nextPos, gameState.player2);
+};
+
+// return the next move by matching a pattern from winningMovePatterns and returning the number
+// (the second value in the array)
+var makeWinningMove = function(board){
+  var board_string = board.join('');
+  for(var i = 0;i < winningMovePatterns.length;i++){
+    var array = board_string.match(winningMovePatterns[i][0]);
+    if(array){ // this is only truthy when someone wins
+      return winningMovePatterns[i][1];
+    }
+  }
+  return -1;
+};
+
+// return the next move by matching a pattern from winningMovePatterns and returning the number
+// (the second value in the array)
+var makeBlockingMove = function(board){
+  var board_string = board.join('');
+  for(var i = 0;i < blockingPatterns.length;i++){
+    var array = board_string.match(blockingPatterns[i][0]);
+      if(array){return blockingPatterns[i][1];}
+  }
+  return -1;
+};
+
+// if the center of board is free, go there, if not go to position 0
+var defaultMove = function(board){
+  return board[4] === ' ' ? 4 : board.indexOf(' ');
+};
+
+var logBoardToConsole = function(board){
+  console.log(board_display(board));
+};
+
+var board_display = function(board){
+  return ' '+board[0]+' |'+' '+board[1]+' |'+' '+board[2]+'\n===+===+===\n'+' '+
+             board[3]+' |'+' '+board[4]+' |'+' '+board[5]+'\n===+===+===\n'+' '+
+             board[6]+' |'+' '+board[7]+' |'+' '+board[8];
+};
