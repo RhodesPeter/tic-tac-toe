@@ -1,5 +1,54 @@
-.game {
+body {
   font-family: sans-serif;
+}
+
+.hidden {
+  display: none;
+}
+
+.visible {
+  display: block;
+}
+
+.pick-game__challenge,
+.pick-game__symbol {
+  border: 0;
+  border-radius: 2px;
+  background: rgb(228,228,228);
+  width: 150px;
+  height: 30px;
+}
+
+.pick-game__symbol {
+  width: 30px;
+  height: 30px;
+}
+
+.pick-game__button:hover {
+  cursor: pointer;
+}
+
+.pick-game__challenge:focus,
+.pick-game__symbol:focus {
+  background: rgb(192,192,192);
+  outline: 0;
+}
+
+.pick-game__title {
+  font-size: 3.5em;
+}
+
+.pick-game {
+  text-align: center;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%)
+}
+
+.game {
+  text-align: center;
   position: absolute;
   top: 45%;
   left: 50%;
@@ -11,10 +60,37 @@
   text-align: center;
 }
 
+.game__board {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
 [class*="game__box"] {
   height: 125px;
   width: 125px;
   text-align: center;
   font-size: 100px;
-  border: 2px solid black;
+  border-color: black;
+}
+
+.game__box-1,
+.game__box-4 {
+  border-bottom: 2px solid;
+  border-right: 2px solid;
+}
+
+.game__box-2,
+.game__box-5 {
+  border-bottom: 2px solid;
+  border-right: 2px solid;
+}
+
+.game__box-3,
+.game__box-6 {
+  border-bottom: 2px solid;
+}
+
+.game__box-7,
+.game__box-8 {
+  border-right: 2px solid;
 }
