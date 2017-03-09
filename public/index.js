@@ -200,6 +200,12 @@ function startMessage(){
 };
 
 var startGame = function(pos){
+
+  if (gameState.player1 === 'O'){
+    gameState.player1 = 'X';
+    gameState.player2 = 'O';
+  }
+
   makeMove(pos, gameState.player1);
   hasSomeoneWon()[0];
   if (isBoardFilled()){
