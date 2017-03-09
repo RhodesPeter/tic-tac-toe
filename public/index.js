@@ -129,66 +129,101 @@ var hasWonPatterns = [
   var box = document.getElementsByClassName("box");
 
   box[0].addEventListener("click", function() {
-    if (currentTurn === 'player1'){
+    if (gameState.challenge === 'Human vs. Human'){
+      gameState.clickedPosition = 0;
+      startGame(gameState.clickedPosition);
+    }
+    else if (currentTurn === 'player1'){
       gameState.clickedPosition = 0;
       startGame(gameState.clickedPosition);
     }
   });
 
   box[1].addEventListener("click", function() {
-    if (currentTurn === 'player1'){
+    if (gameState.challenge === 'Human vs. Human'){
+      gameState.clickedPosition = 1;
+      startGame(gameState.clickedPosition);
+    } else if (currentTurn === 'player1'){
       gameState.clickedPosition = 1;
       startGame(gameState.clickedPosition);
     }
   });
 
   box[2].addEventListener("click", function() {
-    if (currentTurn === 'player1'){
+    if (gameState.challenge === 'Human vs. Human'){
+      gameState.clickedPosition = 2;
+      startGame(gameState.clickedPosition);
+    }
+    else if (currentTurn === 'player1'){
       gameState.clickedPosition = 2;
       startGame(gameState.clickedPosition);
     }
   });
 
   box[3].addEventListener("click", function() {
-    if (currentTurn === 'player1'){
+    if (gameState.challenge === 'Human vs. Human'){
+      gameState.clickedPosition = 3;
+      startGame(gameState.clickedPosition);
+    }
+    else if (currentTurn === 'player1'){
       gameState.clickedPosition = 3;
       startGame(gameState.clickedPosition);
     }
   });
 
   box[4].addEventListener("click", function() {
-    if (currentTurn === 'player1'){
+    if (gameState.challenge === 'Human vs. Human'){
+      gameState.clickedPosition = 4;
+      startGame(gameState.clickedPosition);
+    }
+    else if (currentTurn === 'player1'){
       gameState.clickedPosition = 4;
       startGame(gameState.clickedPosition);
     }
   });
 
   box[5].addEventListener("click", function() {
-    if (currentTurn === 'player1'){
+    if (gameState.challenge === 'Human vs. Human'){
+      gameState.clickedPosition = 5;
+      startGame(gameState.clickedPosition);
+    }
+    else if (currentTurn === 'player1'){
       gameState.clickedPosition = 5;
       startGame(gameState.clickedPosition);
     }
   });
 
   box[6].addEventListener("click", function() {
-    if (currentTurn === 'player1'){
+    if (gameState.challenge === 'Human vs. Human'){
+      gameState.clickedPosition = 6;
+      startGame(gameState.clickedPosition);
+    }
+    else if (currentTurn === 'player1'){
       gameState.clickedPosition = 6;
       startGame(gameState.clickedPosition);
     }
   });
 
   box[7].addEventListener("click", function() {
-    if (currentTurn === 'player1'){
+    if (gameState.challenge === 'Human vs. Human'){
+      gameState.clickedPosition = 7;
+      startGame(gameState.clickedPosition);
+    }
+    else if (currentTurn === 'player1'){
       gameState.clickedPosition = 7;
       startGame(gameState.clickedPosition);
     }
   });
 
   box[8].addEventListener("click", function() {
-    if (currentTurn === 'player1'){
+    if (gameState.challenge === 'Human vs. Human'){
       gameState.clickedPosition = 8;
       startGame(gameState.clickedPosition);
     }
+    else if (currentTurn === 'player1'){
+      gameState.clickedPosition = 8;
+      startGame(gameState.clickedPosition);
+    };
   });
 
 function markBox(pos, player){
@@ -200,15 +235,21 @@ function startMessage(){
 };
 
 var startGame = function(pos){
+  console.log(gameState.player1, gameState.player2);
+  console.log(currentTurn);
 
   if (gameState.player1 === 'O'){
     gameState.player1 = 'X';
     gameState.player2 = 'O';
   }
 
-  makeMove(pos, gameState.player1);
+  makeMove(pos, gameState[currentTurn]);
   hasSomeoneWon()[0];
   if (isBoardFilled()){
+    return;
+  };
+
+  if (gameState.challenge === 'Human vs. Human'){
     return;
   };
 
