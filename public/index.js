@@ -3,7 +3,7 @@
 var gameState = {
     board : [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
     player1 : '',
-    player2 : 'H',
+    player2 : 'O',
     challenge : '',
     round : 1,
     clickedPosition : ''
@@ -125,85 +125,73 @@ var hasWonPatterns = [
                       [(/..X.X.X../),'X']
                      ];
 
-(function(){
   var box = document.getElementsByClassName("box");
 
   box[0].addEventListener("click", function() {
     if (currentTurn === 'player1'){
-      markBox(box[0]);
-      startGame();
+      gameState.clickedPosition = 0;
+      startGame(gameState.clickedPosition);
     }
   });
 
   box[1].addEventListener("click", function() {
     if (currentTurn === 'player1'){
-      markBox(box[1]);
       gameState.clickedPosition = 1;
-      startGame();
+      startGame(gameState.clickedPosition);
     }
   });
 
   box[2].addEventListener("click", function() {
     if (currentTurn === 'player1'){
-      markBox(box[2]);
       gameState.clickedPosition = 2;
-      startGame();
+      startGame(gameState.clickedPosition);
     }
   });
 
   box[3].addEventListener("click", function() {
     if (currentTurn === 'player1'){
-      markBox(box[3]);
       gameState.clickedPosition = 3;
-      startGame();
+      startGame(gameState.clickedPosition);
     }
   });
 
   box[4].addEventListener("click", function() {
     if (currentTurn === 'player1'){
-      markBox(box[4]);
       gameState.clickedPosition = 4;
-      startGame();
+      startGame(gameState.clickedPosition);
     }
   });
 
   box[5].addEventListener("click", function() {
     if (currentTurn === 'player1'){
-      markBox(box[5]);
       gameState.clickedPosition = 5;
-      startGame();
+      startGame(gameState.clickedPosition);
     }
   });
 
   box[6].addEventListener("click", function() {
     if (currentTurn === 'player1'){
-      markBox(box[6]);
       gameState.clickedPosition = 6;
-      startGame();
+      startGame(gameState.clickedPosition);
     }
   });
 
   box[7].addEventListener("click", function() {
     if (currentTurn === 'player1'){
-      markBox(box[7]);
       gameState.clickedPosition = 7;
-      startGame();
+      startGame(gameState.clickedPosition);
     }
   });
 
   box[8].addEventListener("click", function() {
     if (currentTurn === 'player1'){
-      markBox(box[8]);
       gameState.clickedPosition = 8;
-      startGame();
+      startGame(gameState.clickedPosition);
     }
   });
 
-})();
-
-
-function markBox(box){
-  box.innerHTML = gameState.player1;
+function markBox(pos, player){
+  box[pos].innerHTML = gameState[player];
 };
 
 var round = 1;
@@ -212,23 +200,42 @@ function startMessage(){
   console.log("Click a square to make your first move!"); // log this to screen
 }
 
-var startGame = function(){
+var startGame = function(pos){
+  makeMove(pos, gameState.player1);
+  hasSomeoneWon()[0];
+  if (isBoardFilled()){
+    return;
+  };
+  findNextMove(gameState.board);
+  hasSomeoneWon()[0];
+  if (isBoardFilled()){
+    return;
+  };
+};
 
-  logRound();
-  var board = gameState.board;
+var makeMove = function(pos, symbol){
+  if(pos >= 0 && pos <= 8 && gameState.board[pos] === ' '){
+    gameState.board.splice(pos, 1, symbol);
+    currentTurn = (currentTurn === 'player1') ? 'player2' : 'player1';
+    logBoardToConsole(gameState.board);
+    console.log(gameState.board);
+  }
+};
 
-  if(makeMove(gameState.clickedPosition, 'player1')){
-    if(hasSomeoneWon(gameState.board)[0] || isBoardFilled(board)) {
-      endGame();
-    }
-    findNextMove(board);
-    if(hasSomeoneWon(board)[0] || isBoardFilled(board)) {
-      endGame();
-    } else {
-      logBoardToConsole(board);
+// this searches winningMovePatterns then blockingPatterns and if there is no
+// match run defaultMove()
+var findNextMove = function(board){
+  var nextPos = makeWinningMove(board);
+  console.log(nextPos, 'winning move');
+  if(nextPos === -1){
+    nextPos = makeBlockingMove(board);
+    console.log(nextPos, 'blocking move');
+    if(nextPos === -1){
+      nextPos = defaultMove(board);
+      console.log(nextPos, 'default move');
     }
   }
-
+  makeMove(nextPos, gameState.player2);
 };
 
 var logRound = function(){
@@ -236,19 +243,9 @@ var logRound = function(){
   round++
 };
 
-var makeMove = function(pos, player){
-  var play = gameState[currentTurn];
-  if(player !== currentTurn){return false;}
-  if(pos >= 0 && pos <= 8 && !isNaN(pos) && gameState.board[pos] === ' '){
-    gameState.board.splice(pos, 1, play);
-    currentTurn = (currentTurn === 'player1') ? 'player2' : 'player1';
-    return true;
-  }
-  return false;
-};
 
 // if the board matches a pattern from hasWonPatterns, return the winner
-var hasSomeoneWon = function(board){
+var hasSomeoneWon = function(){
   var board_string = gameState.board.join('');
   var theWinner = null;
   for(var i = 0;i < hasWonPatterns.length;i++){
@@ -258,7 +255,8 @@ var hasSomeoneWon = function(board){
     }
   }
   if(theWinner){
-    logBoardToConsole();
+    var board = gameState.board
+    logBoardToConsole(board);
     console.log('Game over.', theWinner, 'is the winner!');
     return [true, theWinner];
   }
@@ -272,19 +270,6 @@ var isBoardFilled = function(){
     return true;
   }
   return false;
-};
-
-// this searches winningMovePatterns then blockingPatterns and if there is no
-// match run defaultMove()
-var findNextMove = function(board){
-  var nextPos = makeWinningMove(board);
-  if(nextPos === -1){
-    nextPos = makeBlockingMove(board);
-    if(nextPos === -1){
-      nextPos = defaultMove(board);
-    }
-  }
-  makeMove(nextPos, gameState.player2);
 };
 
 // return the next move by matching a pattern from winningMovePatterns and returning the number
