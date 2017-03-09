@@ -3,7 +3,7 @@
 var gameState = {
     board : [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
     player1 : '',
-    player2 : '',
+    player2 : 'H',
     challenge : '',
     round : 1,
     clickedPosition : ''
@@ -129,52 +129,82 @@ var hasWonPatterns = [
   var box = document.getElementsByClassName("box");
 
   box[0].addEventListener("click", function() {
-      box[0].innerHTML = gameState.player1;
-      gameState.clickedPosition = 0;
+    if (currentTurn === 'player1'){
+      markBox(box[0]);
+      startGame();
+    }
   });
 
   box[1].addEventListener("click", function() {
-      box[1].innerHTML = gameState.player1;
+    if (currentTurn === 'player1'){
+      markBox(box[1]);
       gameState.clickedPosition = 1;
+      startGame();
+    }
   });
 
   box[2].addEventListener("click", function() {
-      box[2].innerHTML = gameState.player1;
+    if (currentTurn === 'player1'){
+      markBox(box[2]);
       gameState.clickedPosition = 2;
+      startGame();
+    }
   });
 
   box[3].addEventListener("click", function() {
-      box[3].innerHTML = gameState.player1;
+    if (currentTurn === 'player1'){
+      markBox(box[3]);
       gameState.clickedPosition = 3;
+      startGame();
+    }
   });
 
   box[4].addEventListener("click", function() {
-      box[4].innerHTML = gameState.player1;
+    if (currentTurn === 'player1'){
+      markBox(box[4]);
       gameState.clickedPosition = 4;
+      startGame();
+    }
   });
 
   box[5].addEventListener("click", function() {
-      box[5].innerHTML = gameState.player1;
+    if (currentTurn === 'player1'){
+      markBox(box[5]);
       gameState.clickedPosition = 5;
+      startGame();
+    }
   });
 
   box[6].addEventListener("click", function() {
-      box[6].innerHTML = gameState.player1;
+    if (currentTurn === 'player1'){
+      markBox(box[6]);
       gameState.clickedPosition = 6;
+      startGame();
+    }
   });
 
   box[7].addEventListener("click", function() {
-      box[7].innerHTML = gameState.player1;
+    if (currentTurn === 'player1'){
+      markBox(box[7]);
       gameState.clickedPosition = 7;
+      startGame();
+    }
   });
 
   box[8].addEventListener("click", function() {
-      box[8].innerHTML = gameState.player1;
+    if (currentTurn === 'player1'){
+      markBox(box[8]);
       gameState.clickedPosition = 8;
       startGame();
+    }
   });
 
 })();
+
+
+function markBox(box){
+  box.innerHTML = gameState.player1;
+};
 
 var round = 1;
 
@@ -184,14 +214,13 @@ function startMessage(){
 
 var startGame = function(){
 
-  logStats();
+  logRound();
   var board = gameState.board;
-  console.log(gameState.clickedPosition);
+
   if(makeMove(gameState.clickedPosition, 'player1')){
     if(hasSomeoneWon(gameState.board)[0] || isBoardFilled(board)) {
       endGame();
     }
-    logStats();
     findNextMove(board);
     if(hasSomeoneWon(board)[0] || isBoardFilled(board)) {
       endGame();
@@ -202,15 +231,16 @@ var startGame = function(){
 
 };
 
-var logStats = function(){
+var logRound = function(){
   console.log('  Round ' + round); // print this on screen
   round++
 };
 
 var makeMove = function(pos, player){
+  var play = gameState[currentTurn];
   if(player !== currentTurn){return false;}
-  if(+pos >= 0 && +pos <= 8 && !isNaN(+pos) && gameState.board[+pos] === ' '){
-    gameState.board.splice(+pos, 1, player);
+  if(pos >= 0 && pos <= 8 && !isNaN(pos) && gameState.board[pos] === ' '){
+    gameState.board.splice(pos, 1, play);
     currentTurn = (currentTurn === 'player1') ? 'player2' : 'player1';
     return true;
   }
