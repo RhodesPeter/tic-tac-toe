@@ -211,8 +211,12 @@ var startGame = function(pos){
   if (isBoardFilled()){
     return;
   };
-  findNextMove(gameState.board);
-  hasSomeoneWon()[0];
+
+  setTimeout(function(){
+    findNextMove(gameState.board);
+    hasSomeoneWon()[0];
+  }, 500);
+
   if (isBoardFilled()){
     return;
   };
@@ -319,7 +323,7 @@ var defaultMove = function(board){
 };
 
 var logBoardToConsole = function(board){
-  console.log(board_display(board));
+    console.log(board_display(board));
 };
 
 var board_display = function(board){
