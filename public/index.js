@@ -9,6 +9,7 @@ var gameState = {
     clickedPosition : ''
 }
 
+var round = 1;
 var currentTurn = 'player1';
 
 var game = document.getElementsByClassName("game")[0];
@@ -194,11 +195,9 @@ function markBox(pos, player){
   box[pos].innerHTML = gameState[player];
 };
 
-var round = 1;
-
 function startMessage(){
   console.log("Click a square to make your first move!"); // log this to screen
-}
+};
 
 var startGame = function(pos){
   makeMove(pos, gameState.player1);
@@ -214,7 +213,7 @@ var startGame = function(pos){
 };
 
 var makeMove = function(pos, symbol){
-  if(pos >= 0 && pos <= 8 && gameState.board[pos] === ' '){
+  if(gameState.board[pos] === ' '){
     gameState.board.splice(pos, 1, symbol);
     currentTurn = (currentTurn === 'player1') ? 'player2' : 'player1';
     logBoardToConsole(gameState.board);
@@ -243,10 +242,18 @@ var logRound = function(){
   round++
 };
 
+function mapSymbolToPatterns(str){
+  var replace = gameState.player1;
+  var symbol = new RegExp(replace,"g");
+  str = str.replace(symbol, "X");
+  return str;
+};
 
 // if the board matches a pattern from hasWonPatterns, return the winner
 var hasSomeoneWon = function(){
   var board_string = gameState.board.join('');
+  var board_string = mapSymbolToPatterns(board_string);
+
   var theWinner = null;
   for(var i = 0;i < hasWonPatterns.length;i++){
     var array = board_string.match(hasWonPatterns[i][0]);
@@ -276,6 +283,8 @@ var isBoardFilled = function(){
 // (the second value in the array)
 var makeWinningMove = function(board){
   var board_string = board.join('');
+  var board_string = mapSymbolToPatterns(board_string);
+
   for(var i = 0;i < winningMovePatterns.length;i++){
     var array = board_string.match(winningMovePatterns[i][0]);
     if(array){ // this is only truthy when someone wins
@@ -289,6 +298,8 @@ var makeWinningMove = function(board){
 // (the second value in the array)
 var makeBlockingMove = function(board){
   var board_string = board.join('');
+  var board_string = mapSymbolToPatterns(board_string);
+
   for(var i = 0;i < blockingPatterns.length;i++){
     var array = board_string.match(blockingPatterns[i][0]);
       if(array){return blockingPatterns[i][1];}
