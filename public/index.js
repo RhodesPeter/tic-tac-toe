@@ -1,12 +1,12 @@
 "use strict";
 
 var gameState = {
-    board : [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-    player1 : '',
-    player2 : 'O',
-    challenge : '',
-    clickedPosition : '',
-    currentTurn : 'player1'
+  board : [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  player1 : '',
+  player2 : 'O',
+  challenge : '',
+  clickedPosition : '',
+  currentTurn : 'player1'
 };
 
 var game = document.getElementsByClassName("game")[0];
@@ -15,6 +15,8 @@ var symbolContainer = document.getElementsByClassName("pick-game__symbol-contain
 var pickChallenge = document.getElementsByClassName("pick-game__challenge");
 var challengeButton = document.getElementsByClassName("pick-game__symbol");
 var player = document.getElementsByClassName("player")[0];
+var box = document.getElementsByClassName("box");
+var startGameButton = document.getElementsByClassName('game__start-button')[0];
 
 for(var i = 0; i < challengeButton.length; i++) {
   addListenerToChallengeButtons(i);
@@ -22,7 +24,6 @@ for(var i = 0; i < challengeButton.length; i++) {
 
 function addListenerToChallengeButtons(i){
   challengeButton[i].addEventListener("click", function() {
-
     var symbol = event.target.innerHTML;
 
     if (gameState.player1 === '' && gameState.challenge === 'Human vs. Human'){
@@ -56,7 +57,6 @@ function addListenerToSymbolButtons(){
     if (challenge === 'Human vs. Human'){
       player.innerHTML = 'Player 1';
     }
-
     if (challenge === 'Computer vs. Computer'){
         var startGameButton = document.getElementsByClassName('game__start-button')[0];
         show(startGameButton);
@@ -67,7 +67,6 @@ function addListenerToSymbolButtons(){
   });
 }
 
-var startGameButton = document.getElementsByClassName('game__start-button')[0];
 startGameButton.addEventListener("click", function(){ compVsComp() })
 
 function addChallenge(challenge){
@@ -96,8 +95,6 @@ function show(element){
   element.classList.add("visible");
   element.classList.remove("hidden");
 }
-
-var box = document.getElementsByClassName("box");
 
 for(var i = 0; i < box.length; i++) {
   addListenersToBoxes(i);
@@ -160,7 +157,7 @@ function startMessage(){
   console.log("Click a square to make your first move!");
 };
 
-var findNextMove = function(board){
+function findNextMove(board){
   var nextPos = makeWinningMove(board);
   if(nextPos === -1){
     nextPos = makeBlockingMove(board);
@@ -186,13 +183,13 @@ function mapSymbolToPatterns(str){
 };
 
 // if the board matches a pattern from hasWonPatterns, return the winner
-var hasSomeoneWon = function(){
-  var board_string = gameState.board.join('');
-  var board_string = mapSymbolToPatterns(board_string);
-
+function hasSomeoneWon(){
+  var boardString = gameState.board.join('');
+  var boardString = mapSymbolToPatterns(boardString);
   var theWinner = null;
+
   for(var i = 0;i < hasWonPatterns.length;i++){
-    var array = board_string.match(hasWonPatterns[i][0]);
+    var array = boardString.match(hasWonPatterns[i][0]);
     if(array){
       theWinner = hasWonPatterns[i][1];
     }
@@ -206,7 +203,7 @@ var hasSomeoneWon = function(){
   return [false, null];
 };
 
-var isBoardFilled = function(){
+function isBoardFilled (){
   if(gameState.board.indexOf(' ') === -1){
     console.log("Game over, it's a draw!");
     return true;
@@ -215,12 +212,12 @@ var isBoardFilled = function(){
 };
 
 // return the next move by matching a pattern from winningMovePatterns
-var makeWinningMove = function(board){
-  var board_string = board.join('');
-  var board_string = mapSymbolToPatterns(board_string);
+function makeWinningMove(board){
+  var boardString = board.join('');
+  var boardString = mapSymbolToPatterns(boardString);
 
   for(var i = 0;i < winningMovePatterns.length;i++){
-    var array = board_string.match(winningMovePatterns[i][0]);
+    var array = boardString.match(winningMovePatterns[i][0]);
     if(array){
       return winningMovePatterns[i][1];
     }
@@ -229,11 +226,11 @@ var makeWinningMove = function(board){
 };
 
 // return the next move by matching a pattern from winningMovePatterns
-var makeBlockingMove = function(board){
-  var board_string = mapSymbolToPatterns(board.join(''));
+function makeBlockingMove(board){
+  var boardString = mapSymbolToPatterns(board.join(''));
 
   for(var i = 0; i < blockingPatterns.length; i++){
-    var array = board_string.match(blockingPatterns[i][0]);
+    var array = boardString.match(blockingPatterns[i][0]);
       if(array){
         return blockingPatterns[i][1];
       }
@@ -247,10 +244,10 @@ function defaultMove(board){
 };
 
 function logBoardToConsole(board){
-  console.log(board_display(board));
+  console.log(boardDisplay(board));
 };
 
-var board_display = function(board){
+function boardDisplay(board){
   return ' '+board[0]+' |'+' '+board[1]+' |'+' '+board[2]+'\n===+===+===\n'+' '+
              board[3]+' |'+' '+board[4]+' |'+' '+board[5]+'\n===+===+===\n'+' '+
              board[6]+' |'+' '+board[7]+' |'+' '+board[8];
