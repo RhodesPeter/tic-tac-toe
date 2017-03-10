@@ -7,11 +7,12 @@ body {
 }
 
 .visible {
-  display: block;
+  display: inline-block;;
 }
 
 .pick-game__challenge,
-.pick-game__symbol {
+.pick-game__symbol,
+.game__start-button {
   border: 0;
   border-radius: 2px;
   background: rgb(228,228,228);
@@ -19,17 +20,23 @@ body {
   height: 30px;
 }
 
+.game__start-button {
+  margin-top: 35px;
+}
+
 .pick-game__symbol {
   width: 30px;
   height: 30px;
 }
 
-.pick-game__button:hover {
+.pick-game__button:hover,
+.game__start-button:hover {
   cursor: pointer;
 }
 
 .pick-game__challenge:focus,
-.pick-game__symbol:focus {
+.pick-game__symbol:focus,
+.game__start-button:focus {
   background: rgb(192,192,192);
   outline: 0;
 }

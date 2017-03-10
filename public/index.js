@@ -60,10 +60,18 @@ function addListenerToSymbolButtons(){
       player.innerHTML = 'Player 1';
     }
 
+    if (challenge === 'Computer vs. Computer'){
+        var startGameButton = document.getElementsByClassName('game__start-button')[0];
+        show(startGameButton);
+    }
+
     swapVisibility(challengeContainer, symbolContainer);
     addChallenge(challenge);
   });
 }
+
+var startGameButton = document.getElementsByClassName('game__start-button')[0];
+startGameButton.addEventListener("click", function(){ compVsComp() })
 
 function addChallenge(challenge){
   gameState.challenge = challenge;
@@ -245,10 +253,12 @@ var startGame = function(pos){
 
   makeMove(pos, gameState[currentTurn]);
   hasSomeoneWon()[0];
+
   if (isBoardFilled()){
     return;
   };
 
+  // return out of function so that the computer doesn't play join game.
   if (gameState.challenge === 'Human vs. Human'){
     return;
   };
@@ -261,6 +271,21 @@ var startGame = function(pos){
   if (isBoardFilled()){
     return;
   };
+
+  if(gameState.challenge === 'Computer vs. Computer'){
+    startGame();
+  }
+};
+
+function compVsComp(){
+
+  setTimeout(function(){
+    findNextMove(gameState.board);
+    if (hasSomeoneWon()[0]){ return; }
+    if (isBoardFilled()){ return; }
+    compVsComp();
+  }, 500);
+
 };
 
 var makeMove = function(pos, symbol){
@@ -285,7 +310,7 @@ var findNextMove = function(board){
       console.log(nextPos, 'default move');
     }
   }
-  makeMove(nextPos, gameState.player2);
+  makeMove(nextPos, gameState[currentTurn]);
 };
 
 var logRound = function(){
