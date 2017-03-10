@@ -5,11 +5,9 @@ var gameState = {
     player1 : '',
     player2 : 'O',
     challenge : '',
-    round : 1,
     clickedPosition : ''
 }
 
-var round = 1;
 var currentTurn = 'player1';
 
 var game = document.getElementsByClassName("game")[0];
@@ -311,11 +309,6 @@ var findNextMove = function(board){
     }
   }
   makeMove(nextPos, gameState[currentTurn]);
-};
-
-var logRound = function(){
-  console.log('  Round ' + round); // print this on screen
-  round++
 };
 
 function mapSymbolToPatterns(str){
