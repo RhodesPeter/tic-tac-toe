@@ -185,7 +185,7 @@ function compVsComp(){
    var nextPos = findNextMove(gameState.board);
    makeMove(nextPos, gameState[gameState.currentTurn]);
    if (hasSomeoneWon()[0]){ return; }
-   isBoardFilled();
+   if (isBoardFilled()){ return };
    compVsComp();
  }, 400);
 };
