@@ -5,7 +5,6 @@ var gameState = {
   player1 : '',
   player2 : 'O',
   challenge : '',
-  clickedPosition : '',
   currentTurn : 'player1'
 };
 
@@ -13,17 +12,17 @@ var game = document.getElementsByClassName("game")[0];
 var challengeContainer = document.getElementsByClassName("pick-game__container")[0];
 var symbolContainer = document.getElementsByClassName("pick-game__symbol-container")[0];
 var pickChallenge = document.getElementsByClassName("pick-game__challenge");
-var challengeButton = document.getElementsByClassName("pick-game__symbol");
+var symbolButtons = document.getElementsByClassName("pick-game__symbol");
 var player = document.getElementsByClassName("player")[0];
 var box = document.getElementsByClassName("box");
 var startGameButton = document.getElementsByClassName('game__start-button')[0];
 
-for(var i = 0; i < challengeButton.length; i++) {
-  addListenerToChallengeButtons(i);
+for(var i = 0; i < symbolButtons.length; i++) {
+  addListenerTosymbolButtons(i);
 }
 
-function addListenerToChallengeButtons(i){
-  challengeButton[i].addEventListener("click", function() {
+function addListenerTosymbolButtons(i){
+  symbolButtons[i].addEventListener("click", function() {
     var symbol = event.target.innerHTML;
 
     if (gameState.player1 === '' && gameState.challenge === 'Human vs. Human'){
@@ -47,13 +46,12 @@ function addListenerToChallengeButtons(i){
 }
 
 for(var i = 0; i < pickChallenge.length; i++) {
-  addListenerToSymbolButtons();
+  addListenerToChallengeButtons();
 }
 
-function addListenerToSymbolButtons(){
+function addListenerToChallengeButtons(){
   pickChallenge[i].addEventListener("click", function() {
     var challenge = event.target.innerHTML;
-
     if (challenge === 'Human vs. Human'){
       player.innerHTML = 'Player 1';
     }
@@ -61,9 +59,26 @@ function addListenerToSymbolButtons(){
         var startGameButton = document.getElementsByClassName('game__start-button')[0];
         show(startGameButton);
     }
-
     swapVisibility(challengeContainer, symbolContainer);
     addChallenge(challenge);
+  });
+}
+
+for(var i = 0; i < box.length; i++) {
+  addListenersToBoxes(i);
+}
+
+function addListenersToBoxes(i){
+  box[i].addEventListener("click", function() {
+    if (gameState.board[i] !== ' '){
+      return
+    }
+    else if (gameState.challenge === 'Human vs. Human'){
+      humanVsHuman(i);
+    }
+    else if (gameState.currentTurn === 'player1'){
+      humanVsComputer(i);
+    }
   });
 }
 
@@ -94,23 +109,6 @@ function hide(element){
 function show(element){
   element.classList.add("visible");
   element.classList.remove("hidden");
-}
-
-for(var i = 0; i < box.length; i++) {
-  addListenersToBoxes(i);
-}
-
-function addListenersToBoxes(i){
-  box[i].addEventListener("click", function() {
-    if (gameState.challenge === 'Human vs. Human'){
-      gameState.clickedPosition = i;
-      humanVsHuman(gameState.clickedPosition);
-    }
-    else if (gameState.currentTurn === 'player1'){
-      gameState.clickedPosition = i;
-      humanVsComputer(gameState.clickedPosition);
-    }
-  });
 }
 
 // regex matches if current player is 1 move away from winning & supplies winning move
@@ -184,8 +182,7 @@ function mapSymbolToPatterns(str){
 
 // if the board matches a pattern from hasWonPatterns, return the winner
 function hasSomeoneWon(){
-  var boardString = gameState.board.join('');
-  var boardString = mapSymbolToPatterns(boardString);
+  var boardString = mapSymbolToPatterns(gameState.board.join(''));
   var theWinner = null;
 
   for(var i = 0;i < hasWonPatterns.length;i++){
