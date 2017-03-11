@@ -8,6 +8,11 @@ var symbolButtons = document.getElementsByClassName("pick-game__symbol");
 var player = document.getElementsByClassName("player")[0];
 var box = document.getElementsByClassName("box");
 var startGameButton = document.getElementsByClassName('game__start-button')[0];
+var whoGoesFirst = document.getElementsByClassName('game__who-goes-first')[0];
+
+whoGoesFirst.addEventListener('click', function(){
+  swapVisibility(whoGoesFirst, game);
+})
 
 for(var i = 0; i < pickChallenge.length; i++) {
   addListenerToChallengeButtons();
@@ -18,7 +23,7 @@ function addListenerToChallengeButtons(){
     var challenge = event.target.innerHTML;
     addChallenge(challenge);
     if (challenge === 'Computer vs. Computer'){
-      swapVisibility(challengeContainer, game);
+      swapVisibility(challengeContainer, whoGoesFirst);
       show(document.getElementsByClassName('game__start-button')[0]);
     }
     else if (challenge === 'Human vs. Human'){
@@ -44,15 +49,15 @@ function addListenerTosymbolButtons(i){
     }
     else if (gameState.player1 === ''){
       addSymbol(symbol, 'player1');
-      swapVisibility(symbolContainer, game);
+      swapVisibility(symbolContainer, whoGoesFirst);
       startMessage();
     }
     else if (gameState.player1 === symbol){
       player.innerHTML = 'That symbol has been taken!';
     }
     else {
+      swapVisibility(symbolContainer, whoGoesFirst);
       addSymbol(symbol, 'player2');
-      swapVisibility(symbolContainer, game);
       startMessage();
     }
   });
