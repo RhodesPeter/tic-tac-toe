@@ -1,5 +1,5 @@
 var test = require('tape');
-var game = require('../public/game.js');
+var game = require('../public/index.js');
 
 test('Testing that hasSomeoneWon() returns the correct winning player', function(t){
   var board = [' ', 'O', 'O', '.', '.', '.', '.', '.', ' '];
