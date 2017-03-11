@@ -77,9 +77,11 @@ function addListenersToBoxes(i){
       return
     }
     else if (gameState.challenge === 'Human vs. Human'){
+      markBox(i, gameState.currentTurn);
       humanVsHuman(i);
     }
     else if (gameState.currentTurn === 'player1'){
+      markBox(i, gameState.currentTurn);
       humanVsComputer(i);
     }
   });
