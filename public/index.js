@@ -11,7 +11,11 @@ var startGameButton = document.getElementsByClassName('game__start-button')[0];
 var whoGoesFirst = document.getElementsByClassName('game__who-goes-first')[0];
 
 whoGoesFirst.addEventListener('click', function(){
+  gameState.currentTurn = event.target.innerHTML.toLowerCase().replace(' ', '');
   swapVisibility(whoGoesFirst, game);
+  if (gameState.currentTurn === 'player2' && gameState.challenge === 'Human vs. Computer'){
+    humanVsComputer();
+  }
 })
 
 for(var i = 0; i < pickChallenge.length; i++) {
