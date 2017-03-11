@@ -61,6 +61,7 @@ function findNextMove(board){
 
 function makeMove(pos, symbol){
  if(gameState.board[pos] === ' '){
+   markBox(pos, gameState.currentTurn);
    gameState.board.splice(pos, 1, symbol);
    gameState.currentTurn = (gameState.currentTurn === 'player1') ? 'player2' : 'player1';
    logBoardToConsole(gameState.board);
