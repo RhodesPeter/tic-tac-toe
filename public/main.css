@@ -12,7 +12,9 @@ body {
 
 .pick-game__challenge,
 .pick-game__symbol,
-.game__start-button {
+.game__start-button,
+.pick-game__player1-button,
+.pick-game__player2-button {
   border: 0;
   border-radius: 2px;
   background: rgb(228,228,228);
@@ -30,13 +32,17 @@ body {
 }
 
 .pick-game__button:hover,
-.game__start-button:hover {
+.game__start-button:hover,
+.pick-game__player1-button,
+.pick-game__player2-button {
   cursor: pointer;
 }
 
 .pick-game__challenge:focus,
 .pick-game__symbol:focus,
-.game__start-button:focus {
+.game__start-button:focus,
+.pick-game__player1-button:focus,
+.pick-game__player2-button:focus {
   background: rgb(192,192,192);
   outline: 0;
 }
