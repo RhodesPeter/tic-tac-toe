@@ -1,31 +1,51 @@
 "use strict";
 
 var gameState = {
-    board : [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-    player1 : '',
-    player2 : 'O',
-    challenge : '',
-    clickedPosition : ''
-}
-
-var currentTurn = 'player1';
+  board : [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  player1 : '',
+  player2 : '',
+  challenge : '',
+  currentTurn : 'player1'
+};
 
 var game = document.getElementsByClassName("game")[0];
 var challengeContainer = document.getElementsByClassName("pick-game__container")[0];
 var symbolContainer = document.getElementsByClassName("pick-game__symbol-container")[0];
 var pickChallenge = document.getElementsByClassName("pick-game__challenge");
-var challengeButton = document.getElementsByClassName("pick-game__symbol");
+var symbolButtons = document.getElementsByClassName("pick-game__symbol");
 var player = document.getElementsByClassName("player")[0];
+var box = document.getElementsByClassName("box");
+var startGameButton = document.getElementsByClassName('game__start-button')[0];
 
-for(var i = 0; i < challengeButton.length; i++) {
-  addListenerToChallengeButtons(i);
+for(var i = 0; i < pickChallenge.length; i++) {
+  addListenerToChallengeButtons();
 }
 
-function addListenerToChallengeButtons(i){
-  challengeButton[i].addEventListener("click", function() {
+function addListenerToChallengeButtons(){
+  pickChallenge[i].addEventListener("click", function() {
+    var challenge = event.target.innerHTML;
+    addChallenge(challenge);
+    if (challenge === 'Computer vs. Computer'){
+      swapVisibility(challengeContainer, game);
+      show(document.getElementsByClassName('game__start-button')[0]);
+    }
+    else if (challenge === 'Human vs. Human'){
+      swapVisibility(challengeContainer, symbolContainer);
+      player.innerHTML = 'Player 1';
+    }
+    else {
+      swapVisibility(challengeContainer, symbolContainer);
+    }
+  });
+}
 
+for(var i = 0; i < symbolButtons.length; i++) {
+  addListenerTosymbolButtons(i);
+}
+
+function addListenerTosymbolButtons(i){
+  symbolButtons[i].addEventListener("click", function() {
     var symbol = event.target.innerHTML;
-
     if (gameState.player1 === '' && gameState.challenge === 'Human vs. Human'){
       addSymbol(symbol, 'player1');
       player.innerHTML = 'Player 2';
@@ -33,7 +53,7 @@ function addListenerToChallengeButtons(i){
     else if (gameState.player1 === ''){
       addSymbol(symbol, 'player1');
       swapVisibility(symbolContainer, game);
-      startMessage()
+      startMessage();
     }
     else if (gameState.player1 === symbol){
       player.innerHTML = 'That symbol has been taken!';
@@ -41,34 +61,29 @@ function addListenerToChallengeButtons(i){
     else {
       addSymbol(symbol, 'player2');
       swapVisibility(symbolContainer, game);
-      startMessage()
+      startMessage();
     }
   });
 }
 
-for(var i = 0; i < pickChallenge.length; i++) {
-  addListenerToSymbolButtons();
+for(var i = 0; i < box.length; i++) {
+  addListenersToBoxes(i);
 }
 
-function addListenerToSymbolButtons(){
-  pickChallenge[i].addEventListener("click", function() {
-    var challenge = event.target.innerHTML;
-
-    if (challenge === 'Human vs. Human'){
-      player.innerHTML = 'Player 1';
+function addListenersToBoxes(i){
+  box[i].addEventListener("click", function() {
+    if (gameState.board[i] !== ' '){
+      return
     }
-
-    if (challenge === 'Computer vs. Computer'){
-        var startGameButton = document.getElementsByClassName('game__start-button')[0];
-        show(startGameButton);
+    else if (gameState.challenge === 'Human vs. Human'){
+      humanVsHuman(i);
     }
-
-    swapVisibility(challengeContainer, symbolContainer);
-    addChallenge(challenge);
+    else if (gameState.currentTurn === 'player1'){
+      humanVsComputer(i);
+    }
   });
 }
 
-var startGameButton = document.getElementsByClassName('game__start-button')[0];
 startGameButton.addEventListener("click", function(){ compVsComp() })
 
 function addChallenge(challenge){
@@ -93,8 +108,6 @@ function show(element){
   element.classList.add("visible");
   element.classList.remove("hidden");
 }
-
-/////////////////////////////game logic below //////////////////////////////////
 
 // regex matches if current player is 1 move away from winning & supplies winning move
 var winningMovePatterns = [
@@ -132,200 +145,58 @@ var hasWonPatterns = [
                       [(/..X.X.X../),'X']
                      ];
 
-  var box = document.getElementsByClassName("box");
-
-  box[0].addEventListener("click", function() {
-    if (gameState.challenge === 'Human vs. Human'){
-      gameState.clickedPosition = 0;
-      startGame(gameState.clickedPosition);
-    }
-    else if (currentTurn === 'player1'){
-      gameState.clickedPosition = 0;
-      startGame(gameState.clickedPosition);
-    }
-  });
-
-  box[1].addEventListener("click", function() {
-    if (gameState.challenge === 'Human vs. Human'){
-      gameState.clickedPosition = 1;
-      startGame(gameState.clickedPosition);
-    } else if (currentTurn === 'player1'){
-      gameState.clickedPosition = 1;
-      startGame(gameState.clickedPosition);
-    }
-  });
-
-  box[2].addEventListener("click", function() {
-    if (gameState.challenge === 'Human vs. Human'){
-      gameState.clickedPosition = 2;
-      startGame(gameState.clickedPosition);
-    }
-    else if (currentTurn === 'player1'){
-      gameState.clickedPosition = 2;
-      startGame(gameState.clickedPosition);
-    }
-  });
-
-  box[3].addEventListener("click", function() {
-    if (gameState.challenge === 'Human vs. Human'){
-      gameState.clickedPosition = 3;
-      startGame(gameState.clickedPosition);
-    }
-    else if (currentTurn === 'player1'){
-      gameState.clickedPosition = 3;
-      startGame(gameState.clickedPosition);
-    }
-  });
-
-  box[4].addEventListener("click", function() {
-    if (gameState.challenge === 'Human vs. Human'){
-      gameState.clickedPosition = 4;
-      startGame(gameState.clickedPosition);
-    }
-    else if (currentTurn === 'player1'){
-      gameState.clickedPosition = 4;
-      startGame(gameState.clickedPosition);
-    }
-  });
-
-  box[5].addEventListener("click", function() {
-    if (gameState.challenge === 'Human vs. Human'){
-      gameState.clickedPosition = 5;
-      startGame(gameState.clickedPosition);
-    }
-    else if (currentTurn === 'player1'){
-      gameState.clickedPosition = 5;
-      startGame(gameState.clickedPosition);
-    }
-  });
-
-  box[6].addEventListener("click", function() {
-    if (gameState.challenge === 'Human vs. Human'){
-      gameState.clickedPosition = 6;
-      startGame(gameState.clickedPosition);
-    }
-    else if (currentTurn === 'player1'){
-      gameState.clickedPosition = 6;
-      startGame(gameState.clickedPosition);
-    }
-  });
-
-  box[7].addEventListener("click", function() {
-    if (gameState.challenge === 'Human vs. Human'){
-      gameState.clickedPosition = 7;
-      startGame(gameState.clickedPosition);
-    }
-    else if (currentTurn === 'player1'){
-      gameState.clickedPosition = 7;
-      startGame(gameState.clickedPosition);
-    }
-  });
-
-  box[8].addEventListener("click", function() {
-    if (gameState.challenge === 'Human vs. Human'){
-      gameState.clickedPosition = 8;
-      startGame(gameState.clickedPosition);
-    }
-    else if (currentTurn === 'player1'){
-      gameState.clickedPosition = 8;
-      startGame(gameState.clickedPosition);
-    };
-  });
-
 function markBox(pos, player){
   box[pos].innerHTML = gameState[player];
 };
 
 function startMessage(){
-  console.log("Click a square to make your first move!"); // log this to screen
+  console.log("Click a square to make your first move!");
 };
 
-var startGame = function(pos){
-  console.log(gameState.player1, gameState.player2);
-  console.log(currentTurn);
-
-  if (gameState.player1 === 'O'){
-    gameState.player1 = 'X';
-    gameState.player2 = 'O';
-  }
-
-  makeMove(pos, gameState[currentTurn]);
-  hasSomeoneWon()[0];
-
-  if (isBoardFilled()){
-    return;
-  };
-
-  // return out of function so that the computer doesn't play join game.
-  if (gameState.challenge === 'Human vs. Human'){
-    return;
-  };
-
-  setTimeout(function(){
-    findNextMove(gameState.board);
-    hasSomeoneWon()[0];
-  }, 500);
-
-  if (isBoardFilled()){
-    return;
-  };
-
-  if(gameState.challenge === 'Computer vs. Computer'){
-    startGame();
-  }
-};
-
-function compVsComp(){
-
-  setTimeout(function(){
-    findNextMove(gameState.board);
-    if (hasSomeoneWon()[0]){ return; }
-    if (isBoardFilled()){ return; }
-    compVsComp();
-  }, 500);
-
-};
-
-var makeMove = function(pos, symbol){
-  if(gameState.board[pos] === ' '){
-    gameState.board.splice(pos, 1, symbol);
-    currentTurn = (currentTurn === 'player1') ? 'player2' : 'player1';
-    logBoardToConsole(gameState.board);
-    console.log(gameState.board);
-  }
-};
-
-// this searches winningMovePatterns then blockingPatterns and if there is no
-// match run defaultMove()
-var findNextMove = function(board){
+function findNextMove(board){
   var nextPos = makeWinningMove(board);
-  console.log(nextPos, 'winning move');
   if(nextPos === -1){
     nextPos = makeBlockingMove(board);
-    console.log(nextPos, 'blocking move');
     if(nextPos === -1){
       nextPos = defaultMove(board);
-      console.log(nextPos, 'default move');
     }
   }
-  makeMove(nextPos, gameState[currentTurn]);
+  return nextPos
 };
 
-function mapSymbolToPatterns(str){
+function makeMove(pos, symbol){
+  if(gameState.board[pos] === ' '){
+    gameState.board.splice(pos, 1, symbol);
+    gameState.currentTurn = (gameState.currentTurn === 'player1') ? 'player2' : 'player1';
+    logBoardToConsole(gameState.board);
+  }
+};
+
+function mapSymbolToPatterns(boardArray){
+  var boardConvertedToOXforComparison = boardArray.join('');
+
   var replace = gameState.player1;
-  var symbol = new RegExp(replace,"g");
-  str = str.replace(symbol, "X");
-  return str;
+  var pattern = new RegExp(replace,"g");
+  var strForComparison = boardConvertedToOXforComparison.replace(pattern, "-");
+
+  var replace2 = gameState.player2;
+  var pattern2 = new RegExp(replace2,"g");
+  strForComparison = strForComparison.replace(pattern2, "O");
+
+  var replace3 = '-';
+  var pattern3 = new RegExp(replace3,"g");
+  strForComparison = strForComparison.replace(pattern3, "X");
+
+  return strForComparison;
 };
 
 // if the board matches a pattern from hasWonPatterns, return the winner
-var hasSomeoneWon = function(){
-  var board_string = gameState.board.join('');
-  var board_string = mapSymbolToPatterns(board_string);
-
+function hasSomeoneWon(){
+  var boardString = mapSymbolToPatterns(gameState.board);
   var theWinner = null;
+
   for(var i = 0;i < hasWonPatterns.length;i++){
-    var array = board_string.match(hasWonPatterns[i][0]);
+    var array = boardString.match(hasWonPatterns[i][0]);
     if(array){
       theWinner = hasWonPatterns[i][1];
     }
@@ -339,8 +210,7 @@ var hasSomeoneWon = function(){
   return [false, null];
 };
 
-// return true if the board is filled
-var isBoardFilled = function(){
+function isBoardFilled (){
   if(gameState.board.indexOf(' ') === -1){
     console.log("Game over, it's a draw!");
     return true;
@@ -348,45 +218,79 @@ var isBoardFilled = function(){
   return false;
 };
 
-// return the next move by matching a pattern from winningMovePatterns and returning the number
-// (the second value in the array)
-var makeWinningMove = function(board){
-  var board_string = board.join('');
-  var board_string = mapSymbolToPatterns(board_string);
+// return the next move by matching a pattern from winningMovePatterns
+function makeWinningMove(board){
+  var boardString = mapSymbolToPatterns(gameState.board);
 
   for(var i = 0;i < winningMovePatterns.length;i++){
-    var array = board_string.match(winningMovePatterns[i][0]);
-    if(array){ // this is only truthy when someone wins
+    var array = boardString.match(winningMovePatterns[i][0]);
+    if(array){
       return winningMovePatterns[i][1];
     }
   }
   return -1;
 };
 
-// return the next move by matching a pattern from winningMovePatterns and returning the number
-// (the second value in the array)
-var makeBlockingMove = function(board){
-  var board_string = board.join('');
-  var board_string = mapSymbolToPatterns(board_string);
+// return the next move by matching a pattern from winningMovePatterns
+function makeBlockingMove(board){
+  var boardString = mapSymbolToPatterns(gameState.board);
 
-  for(var i = 0;i < blockingPatterns.length;i++){
-    var array = board_string.match(blockingPatterns[i][0]);
-      if(array){return blockingPatterns[i][1];}
+  for(var i = 0; i < blockingPatterns.length; i++){
+    var array = boardString.match(blockingPatterns[i][0]);
+      if(array){
+        return blockingPatterns[i][1];
+      }
   }
   return -1;
 };
 
 // if the center of board is free, go there, if not go to position 0
-var defaultMove = function(board){
+function defaultMove(board){
   return board[4] === ' ' ? 4 : board.indexOf(' ');
 };
 
-var logBoardToConsole = function(board){
-    console.log(board_display(board));
+function logBoardToConsole(board){
+  console.log(boardDisplay(board));
 };
 
-var board_display = function(board){
+function boardDisplay(board){
   return ' '+board[0]+' |'+' '+board[1]+' |'+' '+board[2]+'\n===+===+===\n'+' '+
              board[3]+' |'+' '+board[4]+' |'+' '+board[5]+'\n===+===+===\n'+' '+
              board[6]+' |'+' '+board[7]+' |'+' '+board[8];
+};
+
+function humanVsComputer(pos){
+  if (gameState.player1 === 'O'){ gameState.player2 = 'X'; }
+  else { gameState.player2 = 'O' };
+
+  makeMove(pos, gameState[gameState.currentTurn]);
+  hasSomeoneWon()[0];
+  if (isBoardFilled()){ return; };
+
+  setTimeout(function(){
+    var nextPos = findNextMove(gameState.board);
+    makeMove(nextPos, gameState[gameState.currentTurn])
+    hasSomeoneWon()[0];
+  }, 400);
+
+  if (isBoardFilled()){ return; };
+};
+
+function humanVsHuman(pos){
+  makeMove(pos, gameState[gameState.currentTurn]);
+  hasSomeoneWon()[0];
+  if (isBoardFilled()){ return; };
+}
+
+// setTimeout to delay the computer's response
+function compVsComp(){
+  gameState.player1 = 'X';
+  gameState.player2 = 'O',
+  setTimeout(function(){
+    var nextPos = findNextMove(gameState.board);
+    makeMove(nextPos, gameState[gameState.currentTurn]);
+    if (hasSomeoneWon()[0]){ return; }
+    isBoardFilled();
+    compVsComp();
+  }, 400);
 };
