@@ -127,6 +127,6 @@ body {
   [class*="game__box"] {
     height: 110px;
     width: 110px;
-    font-size: 5em;
+    font-size: 4.5em;
   }
 }

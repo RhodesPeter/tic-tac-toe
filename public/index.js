@@ -10,17 +10,8 @@ var box = document.getElementsByClassName("box");
 var startGameButton = document.getElementsByClassName('game__start-button')[0];
 var whoGoesFirst = document.getElementsByClassName('game__who-goes-first')[0];
 var gameMessage = document.getElementsByClassName('game__board-message')[0];
-
-whoGoesFirst.addEventListener('click', function(){
-  gameState.currentTurn = event.target.innerHTML // .toLowerCase().replace(' ', '');
-  swapVisibility(whoGoesFirst, game);
-  if (gameState.challenge === "Human vs. Human" || gameState.challenge === "Human vs. Computer"){
-    inPlayMessage(event.target.innerHTML + ' make your move!');
-  }
-  if (gameState.currentTurn === 'Player 2' && gameState.challenge === 'Human vs. Computer'){
-    humanVsComputer();
-  }
-})
+var whoGoesFirstButton1 = document.getElementsByClassName('pick-game__player1-button')[0];
+var whoGoesFirstButton2 = document.getElementsByClassName('pick-game__player2-button')[0];
 
 for(var i = 0; i < pickChallenge.length; i++) {
   addListenerToChallengeButtons();
@@ -29,7 +20,8 @@ for(var i = 0; i < pickChallenge.length; i++) {
 function addListenerToChallengeButtons(){
   pickChallenge[i].addEventListener("click", function() {
     var challenge = event.target.innerHTML;
-    addChallenge(challenge);
+    addButtonText(whoGoesFirstButton1, whoGoesFirstButton2, challenge);
+    addChallenge(event.target.innerHTML);
     if (challenge === 'Computer vs. Computer'){
       swapVisibility(challengeContainer, whoGoesFirst);
       show(document.getElementsByClassName('game__start-button')[0]);
@@ -89,6 +81,21 @@ function addListenersToBoxes(i){
   });
 }
 
+whoGoesFirst.addEventListener('click', function(){
+  var element = event.target.className;
+  var challenge = gameState.challenge;
+  if (element === 'pick-game__player1-button' || element === 'pick-game__player2-button'){
+    gameState.currentTurn = event.target.innerHTML;
+    swapVisibility(whoGoesFirst, game);
+    if (gameState.currentTurn === 'Computer'){
+      humanVsComputer();
+    }
+    else if (challenge === "Human vs. Human" || challenge === "Human vs. Computer"){
+      inPlayMessage(event.target.innerHTML + ' make your move!');
+    }
+  }
+})
+
 startGameButton.addEventListener("click", function(){ compVsComp() })
 
 function addChallenge(challenge){
@@ -120,4 +127,14 @@ function markBox(pos, player){
 
 function inPlayMessage(message){
   gameMessage.innerHTML = message
+}
+
+function addButtonText(button1, button2, challenge){
+  if (challenge === "Human vs. Computer"){
+    button2.innerHTML = 'Computer';
+  }
+  else if (challenge === "Computer vs. Computer") {
+    button1.innerHTML = 'Computer 1';
+    button2.innerHTML = 'Computer 2';
+  }
 }
