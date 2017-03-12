@@ -9,6 +9,7 @@ var player = document.getElementsByClassName("player")[0];
 var box = document.getElementsByClassName("box");
 var startGameButton = document.getElementsByClassName('game__start-button')[0];
 var whoGoesFirst = document.getElementsByClassName('game__who-goes-first')[0];
+var gameMessage = document.getElementsByClassName('game__board-message')[0];
 
 whoGoesFirst.addEventListener('click', function(){
   gameState.currentTurn = event.target.innerHTML.toLowerCase().replace(' ', '');
@@ -115,3 +116,7 @@ function show(element){
 function markBox(pos, player){
   box[pos].innerHTML = gameState[player];
 };
+
+function inPlayMessage(message){
+  gameMessage.innerHTML = message
+}

@@ -94,13 +94,13 @@ function hasSomeoneWon(){
  for(var i = 0;i < hasWonPatterns.length;i++){
    var array = boardString.match(hasWonPatterns[i][0]);
    if(array){
-     theWinner = hasWonPatterns[i][1];
+     theWinner = gameState.currentTurn
    }
  }
  if(theWinner){
    var board = gameState.board
    logBoardToConsole(board);
-   console.log('Game over.', theWinner, 'is the winner!');
+   inPlayMessage('Game over. ' + theWinner + ' is the winner!');
    return [true, theWinner];
  }
  return [false, null];
@@ -108,7 +108,7 @@ function hasSomeoneWon(){
 
 function isBoardFilled (){
  if(gameState.board.indexOf(' ') === -1){
-   console.log("Game over, it's a draw!");
+   inPlayMessage("Game over, it's a draw!");
    return true;
  }
  return false;

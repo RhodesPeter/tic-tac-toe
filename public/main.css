@@ -23,7 +23,13 @@ body {
 }
 
 .game__start-button {
-  margin-top: 35px;
+  margin-top: 25px;
+}
+
+.game__board-message {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding-top: 20px;
 }
 
 .pick-game__symbol {
@@ -49,6 +55,8 @@ body {
 
 .pick-game__title {
   font-size: 3.5em;
+  margin-bottom: 25px;
+  margin-top: 60px;
 }
 
 .pick-game {
