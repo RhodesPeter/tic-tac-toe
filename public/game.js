@@ -156,7 +156,7 @@ function humanVsComputer(pos){
    makeMove(nextPos, gameState[gameState.currentTurn])
    if (hasSomeoneWon()){ return }
    inPlayMessage('Player 1' + ' make your move!');
- }, 550);
+ }, 650);
 
  if (isBoardFilled()){ return; };
 };
@@ -178,5 +178,5 @@ function compVsComp(){
     if (hasSomeoneWon()){ return }
     if (isBoardFilled()){ return };
     compVsComp();
-  }, 550);
+  }, 650);
 };
