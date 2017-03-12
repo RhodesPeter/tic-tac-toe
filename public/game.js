@@ -2,10 +2,10 @@
 
 var gameState = {
   board : [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-  player1 : '',
-  player2 : '',
+  "Player 1" : '',
+  "Player 2" : '',
   challenge : '',
-  currentTurn : 'player1'
+  currentTurn : 'Player 1'
 };
 
 // regex matches if current player is 1 move away from winning & supplies winning move
@@ -44,10 +44,6 @@ var hasWonPatterns = [
                       [(/..X.X.X../),'X']
                      ];
 
-function startMessage(){
- console.log("Click a square to make your first move!");
-};
-
 function findNextMove(board){
  var nextPos = makeWinningMove(board);
  if(nextPos === -1){
@@ -63,7 +59,7 @@ function makeMove(pos, symbol){
  if(gameState.board[pos] === ' '){
    markBox(pos, gameState.currentTurn);
    gameState.board.splice(pos, 1, symbol);
-   gameState.currentTurn = (gameState.currentTurn === 'player1') ? 'player2' : 'player1';
+   gameState.currentTurn = (gameState.currentTurn === 'Player 1') ? 'Player 2' : 'Player 1';
    logBoardToConsole(gameState.board);
  }
 };
@@ -71,11 +67,11 @@ function makeMove(pos, symbol){
 function mapSymbolToPatterns(boardArray){
  var boardConvertedToOXforComparison = boardArray.join('');
 
- var replace = gameState.player1;
+ var replace = gameState["Player 1"];
  var pattern = new RegExp(replace,"g");
  var strForComparison = boardConvertedToOXforComparison.replace(pattern, "-");
 
- var replace2 = gameState.player2;
+ var replace2 = gameState["Player 2"];
  var pattern2 = new RegExp(replace2,"g");
  strForComparison = strForComparison.replace(pattern2, "O");
 
@@ -86,25 +82,17 @@ function mapSymbolToPatterns(boardArray){
  return strForComparison;
 };
 
-// if the board matches a pattern from hasWonPatterns, return the winner
 function hasSomeoneWon(){
- var boardString = mapSymbolToPatterns(gameState.board);
- var theWinner = null;
-
- for(var i = 0;i < hasWonPatterns.length;i++){
-   var array = boardString.match(hasWonPatterns[i][0]);
-   if(array){
-     theWinner = gameState.currentTurn
-   }
- }
- if(theWinner){
-   var board = gameState.board
-   logBoardToConsole(board);
-   inPlayMessage('Game over. ' + theWinner + ' is the winner!');
-   return [true, theWinner];
- }
- return [false, null];
-};
+  var boardString = mapSymbolToPatterns(gameState.board);
+  for(var i = 0;i < hasWonPatterns.length;i++){
+    if(boardString.match(hasWonPatterns[i][0])){
+      var winner = (gameState.currentTurn === 'Player 1') ? 'Player 2' : 'Player 1';
+      inPlayMessage('Game over. ' + winner + ' is the winner!');
+      return true;
+    };
+  };
+  return false;
+}
 
 function isBoardFilled (){
  if(gameState.board.indexOf(' ') === -1){
@@ -130,7 +118,6 @@ function makeWinningMove(board){
 // return the next move by matching a pattern from winningMovePatterns
 function makeBlockingMove(board){
  var boardString = mapSymbolToPatterns(gameState.board);
-
  for(var i = 0; i < blockingPatterns.length; i++){
    var array = boardString.match(blockingPatterns[i][0]);
      if(array){
@@ -156,37 +143,40 @@ function boardDisplay(board){
 };
 
 function humanVsComputer(pos){
- if (gameState.player1 === 'O'){ gameState.player2 = 'X'; }
- else { gameState.player2 = 'O' };
+ if (gameState["Player 1"] === 'O'){ gameState["Player 2"] = 'X'; }
+ else { gameState["Player 2"] = 'O' };
 
+ inPlayMessage('Computer' + ' make your move!');
  makeMove(pos, gameState[gameState.currentTurn]);
- hasSomeoneWon()[0];
+ if (hasSomeoneWon()){ return; }
  if (isBoardFilled()){ return; };
 
  setTimeout(function(){
    var nextPos = findNextMove(gameState.board);
    makeMove(nextPos, gameState[gameState.currentTurn])
-   hasSomeoneWon()[0];
- }, 400);
+   if (hasSomeoneWon()){ return }
+   inPlayMessage('Player 1' + ' make your move!');
+ }, 550);
 
  if (isBoardFilled()){ return; };
 };
 
 function humanVsHuman(pos){
  makeMove(pos, gameState[gameState.currentTurn]);
- hasSomeoneWon()[0];
+ if (hasSomeoneWon()){ return; };
  if (isBoardFilled()){ return; };
+ inPlayMessage(gameState.currentTurn + ' make your move!');
 }
 
 // setTimeout to delay the computer's response
 function compVsComp(){
- gameState.player1 = 'X';
- gameState.player2 = 'O',
- setTimeout(function(){
-   var nextPos = findNextMove(gameState.board);
-   makeMove(nextPos, gameState[gameState.currentTurn]);
-   if (hasSomeoneWon()[0]){ return; }
-   if (isBoardFilled()){ return };
-   compVsComp();
- }, 400);
+  gameState["Player 1"] = 'X';
+  gameState["Player 2"] = 'O',
+  setTimeout(function(){
+    var nextPos = findNextMove(gameState.board);
+    makeMove(nextPos, gameState[gameState.currentTurn]);
+    if (hasSomeoneWon()){ return }
+    if (isBoardFilled()){ return };
+    compVsComp();
+  }, 550);
 };
