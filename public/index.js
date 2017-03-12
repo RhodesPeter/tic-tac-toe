@@ -9,14 +9,9 @@ var player = document.getElementsByClassName("player")[0];
 var box = document.getElementsByClassName("box");
 var startGameButton = document.getElementsByClassName('game__start-button')[0];
 var whoGoesFirst = document.getElementsByClassName('game__who-goes-first')[0];
-
-whoGoesFirst.addEventListener('click', function(){
-  gameState.currentTurn = event.target.innerHTML.toLowerCase().replace(' ', '');
-  swapVisibility(whoGoesFirst, game);
-  if (gameState.currentTurn === 'player2' && gameState.challenge === 'Human vs. Computer'){
-    humanVsComputer();
-  }
-})
+var gameMessage = document.getElementsByClassName('game__board-message')[0];
+var whoGoesFirstButton1 = document.getElementsByClassName('pick-game__player1-button')[0];
+var whoGoesFirstButton2 = document.getElementsByClassName('pick-game__player2-button')[0];
 
 for(var i = 0; i < pickChallenge.length; i++) {
   addListenerToChallengeButtons();
@@ -25,7 +20,8 @@ for(var i = 0; i < pickChallenge.length; i++) {
 function addListenerToChallengeButtons(){
   pickChallenge[i].addEventListener("click", function() {
     var challenge = event.target.innerHTML;
-    addChallenge(challenge);
+    addButtonText(whoGoesFirstButton1, whoGoesFirstButton2, challenge);
+    addChallenge(event.target.innerHTML);
     if (challenge === 'Computer vs. Computer'){
       swapVisibility(challengeContainer, whoGoesFirst);
       show(document.getElementsByClassName('game__start-button')[0]);
@@ -47,22 +43,20 @@ for(var i = 0; i < symbolButtons.length; i++) {
 function addListenerTosymbolButtons(i){
   symbolButtons[i].addEventListener("click", function() {
     var symbol = event.target.innerHTML;
-    if (gameState.player1 === '' && gameState.challenge === 'Human vs. Human'){
-      addSymbol(symbol, 'player1');
+    if (gameState["Player 1"] === '' && gameState.challenge === 'Human vs. Human'){
+      addSymbol(symbol, 'Player 1');
       player.innerHTML = 'Player 2';
     }
-    else if (gameState.player1 === ''){
-      addSymbol(symbol, 'player1');
+    else if (gameState["Player 1"] === ''){
+      addSymbol(symbol, 'Player 1');
       swapVisibility(symbolContainer, whoGoesFirst);
-      startMessage();
     }
-    else if (gameState.player1 === symbol){
+    else if (gameState["Player 1"] === symbol){
       player.innerHTML = 'That symbol has been taken!';
     }
     else {
       swapVisibility(symbolContainer, whoGoesFirst);
-      addSymbol(symbol, 'player2');
-      startMessage();
+      addSymbol(symbol, 'Player 2');
     }
   });
 }
@@ -73,6 +67,7 @@ for(var i = 0; i < box.length; i++) {
 
 function addListenersToBoxes(i){
   box[i].addEventListener("click", function() {
+    if (gameState.status === 'off'){ return; }
     if (gameState.board[i] !== ' '){
       return
     }
@@ -80,12 +75,27 @@ function addListenersToBoxes(i){
       markBox(i, gameState.currentTurn);
       humanVsHuman(i);
     }
-    else if (gameState.currentTurn === 'player1'){
+    else if (gameState.currentTurn === 'Player 1'){
       markBox(i, gameState.currentTurn);
       humanVsComputer(i);
     }
   });
 }
+
+whoGoesFirst.addEventListener('click', function(){
+  var element = event.target.className;
+  var challenge = gameState.challenge;
+  if (element === 'pick-game__player1-button' || element === 'pick-game__player2-button'){
+    gameState.currentTurn = event.target.innerHTML;
+    swapVisibility(whoGoesFirst, game);
+    if (gameState.currentTurn === 'Computer'){
+      humanVsComputer();
+    }
+    else if (challenge === "Human vs. Human" || challenge === "Human vs. Computer"){
+      inPlayMessage(event.target.innerHTML + ' make your move!');
+    }
+  }
+})
 
 startGameButton.addEventListener("click", function(){ compVsComp() })
 
@@ -115,3 +125,17 @@ function show(element){
 function markBox(pos, player){
   box[pos].innerHTML = gameState[player];
 };
+
+function inPlayMessage(message){
+  gameMessage.innerHTML = message
+}
+
+function addButtonText(button1, button2, challenge){
+  if (challenge === "Human vs. Computer"){
+    button2.innerHTML = 'Computer';
+  }
+  else if (challenge === "Computer vs. Computer") {
+    button1.innerHTML = 'Computer 1';
+    button2.innerHTML = 'Computer 2';
+  }
+}
