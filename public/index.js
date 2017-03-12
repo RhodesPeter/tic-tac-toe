@@ -67,6 +67,7 @@ for(var i = 0; i < box.length; i++) {
 
 function addListenersToBoxes(i){
   box[i].addEventListener("click", function() {
+    if (gameState.status === 'off'){ return; }
     if (gameState.board[i] !== ' '){
       return
     }

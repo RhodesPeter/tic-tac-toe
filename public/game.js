@@ -6,7 +6,8 @@ var gameState = {
   "Player 2" : '',
   Computer : 'O',
   challenge : '',
-  currentTurn : 'Player 1'
+  currentTurn : 'Player 1',
+  status : 'on'
 };
 
 // regex matches if current player is 1 move away from winning & supplies winning move
@@ -100,6 +101,7 @@ function hasSomeoneWon(){
   for(var i = 0;i < hasWonPatterns.length;i++){
     if(boardString.match(hasWonPatterns[i][0])){
       inPlayMessage(winner() + ' is the winner!');
+      gameState.status = 'off'
       return true;
     };
   };
@@ -177,6 +179,9 @@ function humanVsHuman(pos){
 
 // setTimeout to delay the computer's response
 function compVsComp(){
+  // this line is needed so that that human player can't click the board
+  gameState.status = 'off'
+
   gameState["Player 1"] = 'X';
   gameState["Player 2"] = 'O';
   if (gameState.currentTurn === "Computer 1"){
