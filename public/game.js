@@ -38,12 +38,12 @@ var blockingPatterns = [
 
 // regex matches if a player has won & supplies the winning player
 var hasWonPatterns = [
-                      [(/OOO....../),'O'],[(/...OOO.../),'O'],[(/......OOO/),'O'],
-                      [(/O..O..O../),'O'],[(/.O..O..O./),'O'],[(/..O..O..O/),'O'],
-                      [(/O...O...O/),'O'],[(/..O.O.O../),'O'],[(/XXX....../),'X'],
-                      [(/...XXX.../),'X'],[(/......XXX/),'X'],[(/X..X..X../),'X'],
-                      [(/.X..X..X./),'X'],[(/..X..X..X/),'X'],[(/X...X...X/),'X'],
-                      [(/..X.X.X../),'X']
+                      [(/OOO....../)],[(/...OOO.../)],[(/......OOO/)],
+                      [(/O..O..O../)],[(/.O..O..O./)],[(/..O..O..O/)],
+                      [(/O...O...O/)],[(/..O.O.O../)],[(/XXX....../)],
+                      [(/...XXX.../)],[(/......XXX/)],[(/X..X..X../)],
+                      [(/.X..X..X./)],[(/..X..X..X/)],[(/X...X...X/)],
+                      [(/..X.X.X../)]
                      ];
 
 function findNextMove(board){
