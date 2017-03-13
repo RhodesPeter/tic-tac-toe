@@ -187,156 +187,156 @@
     }
   }
 
-function findNextMove(board){
- var nextPos = makeWinningMove(board);
- if(nextPos === -1){
-   nextPos = makeBlockingMove(board);
+  function findNextMove(board){
+   var nextPos = makeWinningMove(board);
    if(nextPos === -1){
-     nextPos = defaultMove(board);
+     nextPos = makeBlockingMove(board);
+     if(nextPos === -1){
+       nextPos = defaultMove(board);
+     }
    }
- }
- return nextPos
-};
-
-function makeMove(pos, symbol){
-  if(gameState.board[pos] === ' '){
-    markBox(pos, gameState.currentTurn);
-    gameState.board.splice(pos, 1, symbol);
-    gameState.currentTurn = (gameState.currentTurn === 'Player 1') ? 'Player 2' : 'Player 1';
-  }
-};
-
-function mapSymbolToPatterns(boardArray){
-  var boardConvertedToOXforComparison = boardArray.join('');
-
-  var replace = gameState["Player 1"];
-  var pattern = new RegExp(replace,"g");
-  var strForComparison = boardConvertedToOXforComparison.replace(pattern, "-");
-
-  var replace2 = gameState["Player 2"];
-  var pattern2 = new RegExp(replace2,"g");
-  strForComparison = strForComparison.replace(pattern2, "O");
-
-  var replace3 = '-';
-  var pattern3 = new RegExp(replace3,"g");
-  strForComparison = strForComparison.replace(pattern3, "X");
-
- return strForComparison;
-};
-
-function winner(){
-  var winner = null;
-  if (gameState.challenge === "Human vs. Computer"){
-    return (gameState.currentTurn === 'Player 1') ? 'Computer' : 'Player 1';
-  }
-  else if (gameState.challenge === "Computer vs. Computer"){
-    return (gameState.currentTurn === 'Player 1') ? 'Computer 2' : 'Computer 1';
-  }
-  else {
-    return (gameState.currentTurn === 'Player 1') ? 'Player 2' : 'Player 1';
-  }
-}
-
-function hasSomeoneWon(){
-  var boardString = mapSymbolToPatterns(gameState.board);
-  for(var i = 0;i < hasWonPatterns.length;i++){
-    if(boardString.match(hasWonPatterns[i][0])){
-      inPlayMessage(winner() + ' is the winner!');
-      gameState.status = 'off'
-      return true;
-    };
+   return nextPos
   };
-  return false;
-}
 
-function isBoardFilled (){
-  if(gameState.board.indexOf(' ') === -1){
-    inPlayMessage("Game over, it's a draw!");
-    return true;
+  function makeMove(pos, symbol){
+    if(gameState.board[pos] === ' '){
+      markBox(pos, gameState.currentTurn);
+      gameState.board.splice(pos, 1, symbol);
+      gameState.currentTurn = (gameState.currentTurn === 'Player 1') ? 'Player 2' : 'Player 1';
+    }
+  };
+
+  function mapSymbolToPatterns(boardArray){
+    var boardConvertedToOXforComparison = boardArray.join('');
+
+    var replace = gameState["Player 1"];
+    var pattern = new RegExp(replace,"g");
+    var strForComparison = boardConvertedToOXforComparison.replace(pattern, "-");
+
+    var replace2 = gameState["Player 2"];
+    var pattern2 = new RegExp(replace2,"g");
+    strForComparison = strForComparison.replace(pattern2, "O");
+
+    var replace3 = '-';
+    var pattern3 = new RegExp(replace3,"g");
+    strForComparison = strForComparison.replace(pattern3, "X");
+
+   return strForComparison;
+  };
+
+  function winner(){
+    var winner = null;
+    if (gameState.challenge === "Human vs. Computer"){
+      return (gameState.currentTurn === 'Player 1') ? 'Computer' : 'Player 1';
+    }
+    else if (gameState.challenge === "Computer vs. Computer"){
+      return (gameState.currentTurn === 'Player 1') ? 'Computer 2' : 'Computer 1';
+    }
+    else {
+      return (gameState.currentTurn === 'Player 1') ? 'Player 2' : 'Player 1';
+    }
   }
-  return false;
-};
 
-// return the next move by matching a pattern from winningMovePatterns
-function makeWinningMove(board){
-  var boardString = mapSymbolToPatterns(gameState.board);
-  for(var i = 0;i < winningMovePatterns.length;i++){
-    if (boardString.match(winningMovePatterns[i][0])){
-      return winningMovePatterns[i][1];
+  function hasSomeoneWon(){
+    var boardString = mapSymbolToPatterns(gameState.board);
+    for(var i = 0;i < hasWonPatterns.length;i++){
+      if(boardString.match(hasWonPatterns[i][0])){
+        inPlayMessage(winner() + ' is the winner!');
+        gameState.status = 'off'
+        return true;
+      };
     };
+    return false;
   }
-  return -1;
-};
 
-// return the next move by matching a pattern from winningMovePatterns
-function makeBlockingMove(board){
-  var boardString = mapSymbolToPatterns(gameState.board);
-  for(var i = 0; i < blockingPatterns.length; i++){
-    var array = boardString.match(blockingPatterns[i][0]);
-      if(array){
-        return blockingPatterns[i][1];
-      }
-  }
-  return -1;
-};
+  function isBoardFilled (){
+    if(gameState.board.indexOf(' ') === -1){
+      inPlayMessage("Game over, it's a draw!");
+      return true;
+    }
+    return false;
+  };
 
-function defaultMove(board){
-  return board[4] === ' ' ? 4 : board.indexOf(' ');
-};
+  // return the next move by matching a pattern from winningMovePatterns
+  function makeWinningMove(board){
+    var boardString = mapSymbolToPatterns(gameState.board);
+    for(var i = 0;i < winningMovePatterns.length;i++){
+      if (boardString.match(winningMovePatterns[i][0])){
+        return winningMovePatterns[i][1];
+      };
+    }
+    return -1;
+  };
 
-function boardDisplay(board){
-  return ' '+board[0]+' |'+' '+board[1]+' |'+' '+board[2]+'\n===+===+===\n'+' '+
-             board[3]+' |'+' '+board[4]+' |'+' '+board[5]+'\n===+===+===\n'+' '+
-             board[6]+' |'+' '+board[7]+' |'+' '+board[8];
-};
+  // return the next move by matching a pattern from winningMovePatterns
+  function makeBlockingMove(board){
+    var boardString = mapSymbolToPatterns(gameState.board);
+    for(var i = 0; i < blockingPatterns.length; i++){
+      var array = boardString.match(blockingPatterns[i][0]);
+        if(array){
+          return blockingPatterns[i][1];
+        }
+    }
+    return -1;
+  };
 
-function humanVsComputer(pos){
-  if (gameState["Player 1"] === 'O'){ gameState["Player 2"] = 'X'; }
-  else { gameState["Player 2"] = 'O' };
+  function defaultMove(board){
+    return board[4] === ' ' ? 4 : board.indexOf(' ');
+  };
 
-  if (gameState["Player 1"] === 'O'){ gameState["Computer"] = 'X' }
+  function boardDisplay(board){
+    return ' '+board[0]+' |'+' '+board[1]+' |'+' '+board[2]+'\n===+===+===\n'+' '+
+               board[3]+' |'+' '+board[4]+' |'+' '+board[5]+'\n===+===+===\n'+' '+
+               board[6]+' |'+' '+board[7]+' |'+' '+board[8];
+  };
 
-  makeMove(pos, gameState[gameState.currentTurn]);
-  if (hasSomeoneWon()){ return; };
-  if (isBoardFilled()){ return; };
+  function humanVsComputer(pos){
+    if (gameState["Player 1"] === 'O'){ gameState["Player 2"] = 'X'; }
+    else { gameState["Player 2"] = 'O' };
 
-  inPlayMessage('Computer make your move!');
+    if (gameState["Player 1"] === 'O'){ gameState["Computer"] = 'X' }
 
-  setTimeout(function(){
-    var nextPos = findNextMove(gameState.board);
-    makeMove(nextPos, gameState[gameState.currentTurn])
+    makeMove(pos, gameState[gameState.currentTurn]);
     if (hasSomeoneWon()){ return; };
     if (isBoardFilled()){ return; };
-    inPlayMessage('Player 1 make your move!');
-  }, 650);
-};
 
-function humanVsHuman(pos){
-  makeMove(pos, gameState[gameState.currentTurn]);
-  if (hasSomeoneWon()){ return; };
-  if (isBoardFilled()){ return; };
-  inPlayMessage(gameState.currentTurn + ' make your move!');
-}
+    inPlayMessage('Computer make your move!');
 
-// setTimeout to delay the computer's response
-function compVsComp(){
-  // this line is needed so that that human player can't click the board
-  gameState.status = 'off'
+    setTimeout(function(){
+      var nextPos = findNextMove(gameState.board);
+      makeMove(nextPos, gameState[gameState.currentTurn])
+      if (hasSomeoneWon()){ return; };
+      if (isBoardFilled()){ return; };
+      inPlayMessage('Player 1 make your move!');
+    }, 650);
+  };
 
-  gameState["Player 1"] = 'X';
-  gameState["Player 2"] = 'O';
-  if (gameState.currentTurn === "Computer 1"){
-    gameState.currentTurn = "Player 1"
-  }
-  else if (gameState.currentTurn === "Computer 2"){
-    gameState.currentTurn = "Player 2"
-  }
-  setTimeout(function(){
-    var nextPos = findNextMove(gameState.board);
-    makeMove(nextPos, gameState[gameState.currentTurn]);
+  function humanVsHuman(pos){
+    makeMove(pos, gameState[gameState.currentTurn]);
     if (hasSomeoneWon()){ return; };
     if (isBoardFilled()){ return; };
-    compVsComp();
-  }, 650);
-};
+    inPlayMessage(gameState.currentTurn + ' make your move!');
+  }
+
+  // setTimeout to delay the computer's response
+  function compVsComp(){
+    // this line is needed so that that human player can't click the board
+    gameState.status = 'off'
+
+    gameState["Player 1"] = 'X';
+    gameState["Player 2"] = 'O';
+    if (gameState.currentTurn === "Computer 1"){
+      gameState.currentTurn = "Player 1"
+    }
+    else if (gameState.currentTurn === "Computer 2"){
+      gameState.currentTurn = "Player 2"
+    }
+    setTimeout(function(){
+      var nextPos = findNextMove(gameState.board);
+      makeMove(nextPos, gameState[gameState.currentTurn]);
+      if (hasSomeoneWon()){ return; };
+      if (isBoardFilled()){ return; };
+      compVsComp();
+    }, 650);
+  };
 })();
