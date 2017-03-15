@@ -152,6 +152,8 @@
 
   function addSymbol(symbol, player){
     gameState[player] = symbol;
+    if (gameState['Player 1'] === 'O'){ gameState["Player 2"] = 'X'; }
+    else { gameState["Player 2"] = 'O' };
   }
 
   function swapVisibility(visible, hidden){
@@ -166,7 +168,7 @@
 
   function show(element){
     element.classList.add("visible");
-    element.classList.remove("hidden");tom
+    element.classList.remove("hidden");
   }
 
   function markBox(pos, player){
@@ -188,15 +190,15 @@
   }
 
   function findNextMove(board){
-   var nextPos = makeWinningMove(board);
-   if(nextPos === -1){
-     nextPos = makeBlockingMove(board);
-     if(nextPos === -1){
-       nextPos = defaultMove(board);
-     }
-   }
-   return nextPos
-  };
+    var nextPos = makeWinningMove(board);
+    if(nextPos === -1){
+      nextPos = makeBlockingMove(board);
+      if(nextPos === -1){
+        nextPos = defaultMove(board);
+      }
+    }
+      return nextPos
+    };
 
   function makeMove(pos, symbol){
     if(gameState.board[pos] === ' '){
@@ -259,9 +261,10 @@
 
   // return the next move by matching a pattern from winningMovePatterns
   function makeWinningMove(board){
-    var boardString = mapSymbolToPatterns(gameState.board);
+    var boardString = mapSymbolToPatterns(board);
     for(var i = 0;i < winningMovePatterns.length;i++){
       if (boardString.match(winningMovePatterns[i][0])){
+        console.log('make winning move');
         return winningMovePatterns[i][1];
       };
     }
@@ -270,10 +273,11 @@
 
   // return the next move by matching a pattern from winningMovePatterns
   function makeBlockingMove(board){
-    var boardString = mapSymbolToPatterns(gameState.board);
+    var boardString = mapSymbolToPatterns(board);
     for(var i = 0; i < blockingPatterns.length; i++){
       var array = boardString.match(blockingPatterns[i][0]);
         if(array){
+          console.log('make blocking winning move');
           return blockingPatterns[i][1];
         }
     }
@@ -281,6 +285,7 @@
   };
 
   function defaultMove(board){
+    console.log('make default move');
     return board[4] === ' ' ? 4 : board.indexOf(' ');
   };
 
@@ -291,9 +296,6 @@
   };
 
   function humanVsComputer(pos){
-    if (gameState["Player 1"] === 'O'){ gameState["Player 2"] = 'X'; }
-    else { gameState["Player 2"] = 'O' };
-
     if (gameState["Player 1"] === 'O'){ gameState["Computer"] = 'X' }
 
     makeMove(pos, gameState[gameState.currentTurn]);
@@ -301,7 +303,10 @@
     if (isBoardFilled()){ return; };
 
     inPlayMessage('Computer make your move!');
+    computersMove()
+  };
 
+  function computersMove(){
     setTimeout(function(){
       var nextPos = findNextMove(gameState.board);
       makeMove(nextPos, gameState[gameState.currentTurn])
@@ -309,7 +314,7 @@
       if (isBoardFilled()){ return; };
       inPlayMessage('Player 1 make your move!');
     }, 650);
-  };
+  }
 
   function humanVsHuman(pos){
     makeMove(pos, gameState[gameState.currentTurn]);
@@ -320,6 +325,10 @@
 
   // setTimeout to delay the computer's response
   function compVsComp(){
+
+    var board = gameState.board;
+    board = board.map(a => { return (a === 'X') ? 'O' : (a === 'O') ? 'X' : ' ';})
+
     // this line is needed so that that human player can't click the board
     gameState.status = 'off'
 
@@ -332,8 +341,9 @@
       gameState.currentTurn = "Player 2"
     }
     setTimeout(function(){
-      var nextPos = findNextMove(gameState.board);
+      var nextPos = findNextMove(board);
       makeMove(nextPos, gameState[gameState.currentTurn]);
+      // console.log(boardDisplay(gameState.board));
       if (hasSomeoneWon()){ return; };
       if (isBoardFilled()){ return; };
       compVsComp();
